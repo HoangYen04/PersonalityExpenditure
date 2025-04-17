@@ -1,0 +1,56 @@
+AnchorPane {
+    -fx-padding: 10;
+}
+
+Text.Subject {
+    -fx-font-size: 30;
+    -fx-font-weight: bold;
+    -fx-fill: red;
+    -fx-stroke: gold;
+    -fx-stroke-width: 3;
+}
+
+
+Text.SubSubject {
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-fill: black;
+    -fx-stroke: gold;
+    -fx-stroke-width: 3;
+}
+
+ImageView.FuncIcon {
+    -fx-padding: 5px;
+}
+
+Text.PageDesc{
+    -fx-font-size: 20;
+    -fx-font-weight: bold;
+    -fx-fill: darkred;
+    -fx-stroke: antiquewhite;
+    -fx-stroke-width: 2;
+}
+
+
+Button{
+    -fx-background-color: darkblue;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-size: 13;
+}
+
+BorderPane{
+    -fx-background-color: aquamarine;
+    -fx-border-style: dashed;
+    -fx-padding: 10;
+    -fx-font-size: 15;
+}
+
+Text.Warning{
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
+    -fx-text-fill: red;
+}
+HBox.Money {
+    -fx-spacing: 5;
+}
