@@ -19,7 +19,7 @@ import javafx.scene.control.DatePicker;
  */
 public class Report1Controller implements Initializable {
     
-     DatePicker datePicker;
+     @FXML DatePicker datePicker;
 
 // Định dạng chỉ hiển thị tháng/năm
    
