@@ -1,3 +1,10 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+
+
+
 AnchorPane {
     -fx-padding: 10;
 }
@@ -31,12 +38,13 @@ Text.PageDesc{
     -fx-stroke-width: 2;
 }
 
-Button {
+Button{
     -fx-background-color: darkblue;
     -fx-font-weight: bold;
     -fx-text-fill: white;
     -fx-font-size: 13;
 }
+
 
 BorderPane{
     -fx-background-color: aquamarine;

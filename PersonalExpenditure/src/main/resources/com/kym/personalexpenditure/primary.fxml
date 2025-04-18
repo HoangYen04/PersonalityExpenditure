@@ -62,7 +62,7 @@
       </HBox>
 
       <!-- Main Content -->
-      <BorderPane layoutX="83.0" layoutY="172.0" prefHeight="230.0" prefWidth="446.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="75.60000000000002" AnchorPane.leftAnchor="83.0" AnchorPane.rightAnchor="83.39999999999992">
+      <BorderPane layoutX="93.0" layoutY="180.0" prefHeight="230.0" prefWidth="446.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="67.60000000000002" AnchorPane.leftAnchor="93.0" AnchorPane.rightAnchor="94.19999999999993">
          <top>
             <Text fill="#a43030" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PageDesc" text="-- Tổng quan thông tin" wrappingWidth="216.103515625" BorderPane.alignment="TOP_LEFT">
                <font>
@@ -71,7 +71,7 @@
             </Text>
          </top>
          <center>
-            <VBox prefHeight="214.0" prefWidth="401.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
+            <VBox prefHeight="209.0" prefWidth="357.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
                <children>
                   <HBox prefHeight="34.0" prefWidth="549.0" styleClass="Money">
                      <children>

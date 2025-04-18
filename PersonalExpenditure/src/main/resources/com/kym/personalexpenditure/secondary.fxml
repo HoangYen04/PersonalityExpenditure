@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="570.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.PrimaryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="570.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.SecondaryController">
    <children>
       <!-- Top Section: Buttons with Icons -->
       <HBox layoutY="7.0" prefHeight="90.0" prefWidth="600.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -92,7 +92,7 @@
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="B">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Danh mục:" />
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="categories" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="C">

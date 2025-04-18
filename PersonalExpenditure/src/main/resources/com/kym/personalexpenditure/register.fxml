@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="384.0" stylesheets="@login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Sub" text="Đăng kí" textAlignment="CENTER" wrappingWidth="372.53508377075195" />
+      <TextField promptText="Tên đăng nhập" />
+      <PasswordField promptText="Mật khẩu" />
+      <PasswordField promptText="Xác nhận mật khẩu" />
+      <Button mnemonicParsing="false" text="Đăng kí" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Sup" text="Đã có tài khoản?" />
+      <Button mnemonicParsing="false" text="Đăng nhập" />
+   </children>
+</VBox>
