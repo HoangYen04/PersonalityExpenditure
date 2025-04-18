@@ -2,11 +2,12 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.kym.pojo;
+package com.kym.services;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.util.function.UnaryOperator;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TextFormatter;
@@ -27,24 +28,39 @@ public class Utils {
         UnaryOperator<TextFormatter.Change> filter = change -> {
             String newText = change.getControlNewText().replace(".", "").replace(",", "");
 
-            // Nếu không phải số hoặc rỗng thì từ chối
-            if (newText.isEmpty()) {
+            // Nếu người dùng chỉ nhập dấu "-" mà chưa nhập số, cho phép
+            if (newText.isEmpty() || newText.equals("-")) {
                 return change;
             }
 
             try {
                 long value = Long.parseLong(newText);
 
+                // Kiểm tra nếu là số âm
                 if (value < 0) {
-                    return null; // Từ chối số âm
+                    // Hiện cảnh báo nếu là số âm
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.setTitle("Cảnh báo");
+                    alert.setHeaderText(null);
+                    alert.setContentText("Không được nhập số âm!");
+                    alert.showAndWait();
+
+                    return null; // Không cho nhập số âm
                 }
 
-                // Cập nhật lại text đã định dạng
+                // Định dạng lại số khi hợp lệ
                 String formatted = numberFormat.format(value);
                 change.setText(formatted);
-                int caretPosition = change.getControlNewText().length();
-                change.setRange(0, change.getControlText().length());
-                change.selectRange(caretPosition, caretPosition);
+
+                // Tính lại vị trí caret an toàn
+                int caretPosition = Math.min(formatted.length(), change.getControlNewText().length());
+                int originalLength = change.getControlText().length();
+                change.setRange(0, originalLength);
+
+                if (caretPosition >= 0 && caretPosition <= formatted.length()) {
+                    change.selectRange(caretPosition, caretPosition);
+                }
+
                 return change;
             } catch (NumberFormatException e) {
                 return null;
@@ -55,7 +71,7 @@ public class Utils {
         textField.setTextFormatter(formatter);
     }
 
-    public static long parseFormattedNumber(String formatted) {
-        return Long.parseLong(formatted.replace(".", "").replace(",", ""));
+    public static double parseCurrency(String input) throws NumberFormatException {
+        return Double.parseDouble(input.replace(",", "").replace(".", ""));
     }
 }

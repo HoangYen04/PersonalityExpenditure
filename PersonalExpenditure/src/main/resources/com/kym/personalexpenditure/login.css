@@ -9,7 +9,7 @@ Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to ed
 VBox {
     -fx-background-color: aquamarine;
     -fx-padding: 10;
-    -fx-spacing: 5;
+    -fx-spacing: 5;  
 }
 Label.Sub {
     -fx-font-size: 24px; 

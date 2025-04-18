@@ -80,13 +80,13 @@
                   <HBox prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="A">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Số tiền:" />
-                        <TextField prefWidth="186.0" />
+                        <TextField fx:id="tfAmount" prefWidth="186.0" />
                      </children>
                   </HBox>
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="•Ngày giao dịch :" />
-                        <DatePicker />
+                        <DatePicker fx:id="dpDate" />
                      </children>
                   </HBox>
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="B">
@@ -98,12 +98,12 @@
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="C">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Mô tả:" />
-                        <TextField prefWidth="186.0" />
+                        <TextField fx:id="tfDesc" prefWidth="186.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" styleClass="Money">
                      <children>
-                        <Button mnemonicParsing="false" text="Thêm giao dịch" />
+                        <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleSaveTransaction" text="Thêm giao dịch" />
                      </children>
                   </HBox>
                </children>
