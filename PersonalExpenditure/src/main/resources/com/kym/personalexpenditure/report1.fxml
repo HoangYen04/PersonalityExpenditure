@@ -77,18 +77,18 @@
                         <HBox prefHeight="34.0" prefWidth="549.0" spacing="10.0" styleClass="Money">
                             <children>
                                 <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tháng: " />
-                        <ComboBox fx:id="monthComboBox" prefWidth="150.0" promptText="2" />
+                        <ComboBox fx:id="monthComboBox" prefWidth="150.0" promptText="4" />
                             </children>
                         </HBox>
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="549.0" spacing="10.0" styleClass="Money">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Năm:   " />
-                        <ComboBox fx:id="yearComboBox" prefWidth="150.0" promptText="2" />
+                        <ComboBox fx:id="yearComboBox" prefWidth="150.0" promptText="2025" />
                      </children>
                   </HBox>
 
                         <!-- Nút xem báo cáo -->
-                        <Button fx:id="viewReportButton" mnemonicParsing="false" text="XEM BÁO CÁO" />
+                        <Button fx:id="viewReportButton" mnemonicParsing="false" onAction="#handleViewReportClick" text="XEM BÁO CÁO" />
                     </children>
                 </VBox>
             </center>
