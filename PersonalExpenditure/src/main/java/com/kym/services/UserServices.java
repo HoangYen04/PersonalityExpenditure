@@ -29,6 +29,9 @@ public class UserServices {
                     result.setName(rs.getString("name"));
                     result.setEmail(rs.getString("email"));
                     result.setPassword(hashedPasswordFromDB); // Lưu lại mật khẩu băm từ DB
+                    
+                    
+                    Session.setCurrentUser(result);
                 }
             }
         }

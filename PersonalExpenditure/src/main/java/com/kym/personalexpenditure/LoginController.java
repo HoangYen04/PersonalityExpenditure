@@ -41,7 +41,6 @@ public class LoginController {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
             Parent root = loader.load();
             PrimaryController controller = loader.getController();
-            controller.setUserName(user.getName()); 
             Scene primaryScene = new Scene(root);
             
             Stage primaryStage = new Stage(); // Tạo một cửa sổ mới

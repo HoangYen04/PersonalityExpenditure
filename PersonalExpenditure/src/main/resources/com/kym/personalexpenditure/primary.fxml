@@ -56,7 +56,7 @@
       <HBox layoutY="101.0" prefHeight="23.0" prefWidth="600.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.799999999999955" AnchorPane.topAnchor="101.0">
          <children>
             <Button mnemonicParsing="false" style="-fx-background-color: #00FF00;" text="Tổng quan" />
-            <Button mnemonicParsing="false" text="Thêm giao dịch" />
+            <Button mnemonicParsing="false" onAction="#handleAddTransaction" text="Thêm giao dịch" />
             <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="133.0" text="Báo cáo tài chính" />
          </children>
       </HBox>
