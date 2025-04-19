@@ -1,68 +1,82 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package com.kym.services;
 
 import com.kym.pojo.JdbcUtils;
-import com.kym.pojo.Transaction;
 import com.kym.pojo.User;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
-/**
- *
- * @author ADMIN
- */
 public class UserServices {
 
-    public User login(String name, String password) throws SQLException {
-        User result = null;  // Sử dụng đối tượng User thay vì List
+    public User loginByEmail(String email, String password) throws SQLException {
+        User result = null;
         try ( Connection conn = JdbcUtils.getConn()) {
-            String sql = "SELECT * FROM users WHERE name = ? AND password = ?";
+            String sql = "SELECT * FROM users WHERE email = ?"; // Chỉ lấy email
             PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, name);
-            stmt.setString(2, password);
+            stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                result = new User();
-                result.setUserId(rs.getInt("id"));
-                result.setName(rs.getString("name"));
-                result.setEmail(rs.getString("email"));
-                result.setPassword(rs.getString("password"));
+                String hashedPasswordFromDB = rs.getString("password"); // Lấy mật khẩu đã băm từ DB
+                String hashedPasswordInput = hashPassword(password); // Băm mật khẩu người dùng nhập vào
+
+                if (hashedPasswordFromDB.equals(hashedPasswordInput)) {
+                    result = new User();
+                    result.setUserId(rs.getInt("user_id"));
+                    result.setName(rs.getString("name"));
+                    result.setEmail(rs.getString("email"));
+                    result.setPassword(hashedPasswordFromDB); // Lưu lại mật khẩu băm từ DB
+                }
             }
         }
-        return result;  // Trả về một đối tượng User thay vì danh sách
-    }
-    // Tên không rỗng, đủ 6 ký tự
-
-    public boolean isValidUsername(String username) {
-        return username != null && username.trim().length() >= 6;
+        return result;
     }
 
-// Giả định kiểm tra trùng từ DB
-    public boolean isUsernameDuplicate(String username) {
+    public boolean registerUser(User user) throws SQLException {
+        String password = user.getPassword();
+
         try ( Connection conn = JdbcUtils.getConn()) {
-            String sql = "SELECT COUNT(*) FROM users WHERE name = ?";
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.setString(1, username);
-            ResultSet rs = stmt.executeQuery();
+            // Kiểm tra xem email đã tồn tại chưa
+            String checkQuery = "SELECT * FROM users WHERE email = ?";
+            PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
+            checkStmt.setString(1, user.getEmail());
+            ResultSet rs = checkStmt.executeQuery();
+
             if (rs.next()) {
-                return rs.getInt(1) > 0;
+                return false;
+                // Email đã tồn tại
             }
-        } catch (Exception e) {
+            String hashedPassword = hashPassword(password);
+            user.setPassword(hashedPassword);
+
+            // Thêm người dùng mới
+            String insertQuery = "INSERT INTO users(name, email, password) VALUES (?, ?, ?)";
+            PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
+            insertStmt.setString(1, user.getName());
+            insertStmt.setString(2, user.getEmail());
+            insertStmt.setString(3, user.getPassword());
+
+            return insertStmt.executeUpdate() > 0;
+        }
+    }
+
+    public static String hashPassword(String password) {
+        try {
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            byte[] hashedBytes = md.digest(password.getBytes());
+
+            StringBuilder sb = new StringBuilder();
+            for (byte b : hashedBytes) {
+                sb.append(String.format("%02x", b));
+            }
+            return sb.toString();
+
+        } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
+            return null;
         }
-        return false;
-    }
-
-// Mật khẩu không rỗng
-    public boolean isPasswordEmpty(String password) {
-        return password == null || password.trim().isEmpty();
     }
 }

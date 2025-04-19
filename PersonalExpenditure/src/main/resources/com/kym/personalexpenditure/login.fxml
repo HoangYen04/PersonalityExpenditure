@@ -11,10 +11,10 @@
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="309.0" prefWidth="375.0" stylesheets="@login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.LoginController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Sub" text="Đăng nhập" textAlignment="CENTER" wrappingWidth="347.3750228881836" />
-      <TextField fx:id="txtUsername" promptText="Tên đăng nhập..." />
+      <TextField fx:id="txtEmail" promptText="Nhập email.." />
       <PasswordField fx:id="txtPassword" promptText="Mật khẩu..." />
-      <Button fx:id="btnLogin" mnemonicParsing="false" onAction="#handleLogin" text="Đăng nhập" />
+      <Button mnemonicParsing="false" onAction="#handleLogin" text="Đăng nhập" />
       <Label styleClass="Sup" text="Chưa có tài khoản?" />
-      <Button mnemonicParsing="false" text="Đăng kí" />
+      <Button mnemonicParsing="false" onAction="#handleRegisterRedirect" text="Đăng kí" />
    </children>
 </VBox>

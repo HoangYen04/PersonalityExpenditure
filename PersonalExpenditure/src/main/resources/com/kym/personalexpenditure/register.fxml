@@ -6,15 +6,15 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Text?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="384.0" stylesheets="@login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="287.0" prefWidth="384.0" stylesheets="@login.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.RegisterController">
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Sub" text="Đăng kí" textAlignment="CENTER" wrappingWidth="372.53508377075195" />
-      <TextField promptText="Tên đăng nhập" />
-      <PasswordField promptText="Mật khẩu" />
-      <PasswordField promptText="Xác nhận mật khẩu" />
-      <Button mnemonicParsing="false" text="Đăng kí" />
+      <TextField fx:id="txtEmailR" promptText="Email..." />
+      <TextField fx:id="txtUsername" promptText="Tên đăng nhập" />
+      <PasswordField fx:id="txtPassword1" promptText="Mật khẩu" />
+      <PasswordField fx:id="txtPassword2" promptText="Xác nhận mật khẩu" />
+      <Button mnemonicParsing="false" onAction="#handleRegister" text="Đăng kí" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Sup" text="Đã có tài khoản?" />
-      <Button mnemonicParsing="false" text="Đăng nhập" />
+      <Button mnemonicParsing="false" onAction="#handleLoginRedirect" text="Đăng nhập" />
    </children>
 </VBox>

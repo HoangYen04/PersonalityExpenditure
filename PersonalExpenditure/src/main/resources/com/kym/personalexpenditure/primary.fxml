@@ -43,12 +43,12 @@
                   </VBox>
                </children>
             </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
+            <Text fx:id="txtGreeting" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="86.0" text="Đăng xuất" />
+            <Button mnemonicParsing="false" onAction="#handleLogout" prefHeight="27.0" prefWidth="86.0" text="Đăng xuất" />
          </children>
       </HBox>
 

@@ -4,58 +4,82 @@ import com.kym.pojo.User;
 import com.kym.services.UserServices;
 import com.kym.services.Utils;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Button;
-import java.net.URL;
-import java.util.ResourceBundle;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
-public class LoginController implements Initializable {
+public class LoginController {
 
-    @FXML
-    private TextField txtUsername;
-    @FXML
-    private PasswordField txtPassword;
-    @FXML
-    private Button btnLogin;
+    @FXML private TextField txtEmail;
+    @FXML private PasswordField txtPassword;
 
     private final UserServices userServices = new UserServices();
 
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        btnLogin.setOnAction(evt -> handleLogin());
-    }
+    @FXML
+    private void handleLogin() {
+        String email = txtEmail.getText().trim();
+        String password = txtPassword.getText().trim();
 
-    public void handleLogin() {
-        String username = txtUsername.getText();
-        String password = txtPassword.getText();
-
-        // Kiểm tra tên đăng nhập
-        if (!userServices.isValidUsername(username)) {
-            Utils.getAlert("Tên đăng nhập phải có ít nhất 6 ký tự và không được để trống.");
+        // Kiểm tra đầu vào
+        if (email.isEmpty() || password.isEmpty()) {
+            Utils.getAlert("Email và mật khẩu không được để trống.").showAndWait();
             return;
         }
 
-        // Kiểm tra mật khẩu
-        if (userServices.isPasswordEmpty(password)) {
-            Utils.getAlert("Mật khẩu không được để trống.");
+        if (!email.matches("^[A-Za-z0-9+_.-]+@gmail\\.com$")) {
+            Utils.getAlert("Email không đúng định dạng.").showAndWait();
             return;
         }
 
         try {
-            // Gọi service để kiểm tra đăng nhập
-            User user = userServices.login(username, password);  // Chỉnh sửa ở đây
+            User user = userServices.loginByEmail(email, password);
             if (user != null) {
-                // Đăng nhập thành công, chuyển sang màn hình chính
-                App.setRoot("primary");
+                Utils.getAlert("Đăng nhập thành công! Xin chào " + user.getName()).showAndWait();
+                 // Khởi tạo một cửa sổ mới cho cảnh primary.fxml
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+            Parent root = loader.load();
+            PrimaryController controller = loader.getController();
+            controller.setUserName(user.getName()); 
+            Scene primaryScene = new Scene(root);
+            
+            Stage primaryStage = new Stage(); // Tạo một cửa sổ mới
+            primaryStage.setTitle("Primary Window");
+            primaryStage.setScene(primaryScene);
+            primaryStage.show();
+
+            // Đóng cửa sổ đăng nhập
+            Stage loginStage = (Stage) txtEmail.getScene().getWindow();
+            loginStage.close();
             } else {
-                Utils.getAlert("Tên đăng nhập hoặc mật khẩu không đúng!");
+                Utils.getAlert("Sai email hoặc mật khẩu.").showAndWait();
             }
         } catch (Exception e) {
-            Utils.getAlert("Đã xảy ra lỗi: " + e.getMessage());
+            e.printStackTrace();
+            Utils.getAlert("Lỗi kết nối cơ sở dữ liệu.");
+        }
+    }
+    public void handleRegisterRedirect() {
+        try {
+            // Tải file FXML của cửa sổ đăng ký
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("register.fxml"));
+            Parent root = loader.load();
+            
+            // Tạo một cửa sổ mới
+            Stage registerStage = new Stage();
+            registerStage.setTitle("Đăng ký");
+            registerStage.setScene(new Scene(root));
+            registerStage.show();
+            
+            // Đóng cửa sổ đăng nhập
+            Stage loginStage = (Stage) txtEmail.getScene().getWindow();
+            loginStage.close();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
-}
+}   
+
+
