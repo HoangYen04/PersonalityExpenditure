@@ -17,6 +17,7 @@ public class Budget {
     private LocalDate endDate;
     private int categoryId;
     private int userId;
+    private String categoryName;
 
     public Budget() {
     }
@@ -134,6 +135,19 @@ public class Budget {
         this.categoryId = categoryId;
     }
 
+    /**
+     * @return the categoryName
+     */
+    public String getCategoryName() {
+        return categoryName;
+    }
+
+    /**
+     * @param categoryName the categoryName to set
+     */
+    public void setCategoryName(String categoryName) {
+        this.categoryName = categoryName;
+    }
     
     
     

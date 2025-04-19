@@ -2,6 +2,8 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
@@ -12,89 +14,102 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="570.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.PrimaryController">
-   <children>
-      <!-- Top Section: Buttons with Icons -->
-      <HBox layoutY="7.0" prefHeight="90.0" prefWidth="600.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="90.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../image/logo.jpg" />
-                     </image>
-                  </ImageView>
-                  <VBox prefHeight="90.0" prefWidth="109.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="Quản lý">
-                           <font>
-                              <Font size="19.0" />
-                           </font>
-                        </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SubSubject" text="Chi tiêu cá nhân">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
-                        </Text>
-                     </children>
-                     <padding>
-                        <Insets left="10.0" top="5.0" />
-                     </padding>
-                  </VBox>
-               </children>
-            </HBox>
-            <Text fx:id="txtGreeting" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <Button mnemonicParsing="false" onAction="#handleLogout" prefHeight="27.0" prefWidth="86.0" text="Đăng xuất" />
-         </children>
-      </HBox>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="606.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.PrimaryController">
+    <children>
+        <!-- Top Section: Buttons with Icons -->
+        <HBox layoutY="7.0" prefHeight="90.0" prefWidth="600.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <ImageView fitHeight="90.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../image/logo.jpg" />
+                            </image>
+                        </ImageView>
+                        <VBox prefHeight="90.0" prefWidth="109.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="Quản lý">
+                                    <font>
+                                        <Font size="19.0" />
+                                    </font>
+                                </Text>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SubSubject" text="Chi tiêu cá nhân">
+                                    <font>
+                                        <Font size="17.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                            <padding>
+                                <Insets left="10.0" top="5.0" />
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+                <Text fx:id="txtGreeting" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Text>
+                <Button mnemonicParsing="false" onAction="#handleLogout" prefHeight="27.0" prefWidth="86.0" text="Đăng xuất" />
+            </children>
+        </HBox>
 
-      <!-- Second Section: Tabs -->
-      <HBox layoutY="101.0" prefHeight="23.0" prefWidth="600.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.799999999999955" AnchorPane.topAnchor="101.0">
-         <children>
-            <Button mnemonicParsing="false" style="-fx-background-color: #00FF00;" text="Tổng quan" />
-            <Button mnemonicParsing="false" onAction="#handleAddTransaction" text="Thêm giao dịch" />
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="133.0" text="Báo cáo tài chính" />
-         </children>
-      </HBox>
+        <!-- Second Section: Tabs -->
+        <HBox layoutY="101.0" prefHeight="23.0" prefWidth="600.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.799999999999955" AnchorPane.topAnchor="101.0">
+            <children>
+                <Button mnemonicParsing="false" style="-fx-background-color: #00FF00;" text="Tổng quan" />
+                <Button mnemonicParsing="false" onAction="#handleAddTransaction" text="Thêm giao dịch" />
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="133.0" text="Báo cáo tài chính" />
+            </children>
+        </HBox>
 
-      <!-- Main Content -->
-      <BorderPane layoutX="93.0" layoutY="180.0" prefHeight="230.0" prefWidth="446.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="67.60000000000002" AnchorPane.leftAnchor="93.0" AnchorPane.rightAnchor="94.19999999999993">
-         <top>
-            <Text fill="#a43030" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PageDesc" text="-- Tổng quan thông tin" wrappingWidth="216.103515625" BorderPane.alignment="TOP_LEFT">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Text>
-         </top>
-         <center>
-            <VBox prefHeight="209.0" prefWidth="357.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
-               <children>
-                  <HBox prefHeight="34.0" prefWidth="549.0" styleClass="Money">
+        <!-- Main Content -->
+        <BorderPane layoutX="116.80000000000001" layoutY="162.0" prefHeight="382.0" prefWidth="435.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="65.0">
+            <top>
+                <Text fill="#a43030" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PageDesc" text="-- Tổng quan thông tin" wrappingWidth="216.103515625" BorderPane.alignment="TOP_LEFT">
+                    <font>
+                        <Font name="System Bold" size="16.0" />
+                    </font>
+                </Text>
+            </top>
+            <center>
+                <VBox prefHeight="209.0" prefWidth="357.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
+                    <children>
+                        <HBox prefHeight="34.0" prefWidth="549.0" styleClass="Money">
+                            <children>
+                                <!-- Total Expenditure -->
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng chi tiêu hiện tại:" />
+                                <Text fx:id="txtTotalSpending" strokeType="OUTSIDE" strokeWidth="0.0" text="0 VNĐ" wrappingWidth="150.0709114074707" />
+                            </children>
+                        </HBox>
+                  <HBox layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="549.0" styleClass="Money">
                      <children>
-                        <!-- Total Expenditure -->
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng chi tiêu hiện tại:" />
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="XXX,YYY,ZZZ" wrappingWidth="150.0709114074707" />
-                     </children>
-                  </HBox>
-
-                  <!-- Budget -->
-                  <HBox prefHeight="31.0" prefWidth="493.0" spacing="5.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Ngân sách:" />
-                        <TextField prefWidth="186.0" />
-                        <Button mnemonicParsing="false" text="Thêm" />
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tổng ngân sách hiện tại:" />
+                        <Text fx:id="txtTotalSpending1" strokeType="OUTSIDE" strokeWidth="0.0" text="0 VNĐ" wrappingWidth="150.0709114074707" />
                      </children>
                   </HBox>
+                        <HBox prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="B">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Danh mục:" />
+                                <ComboBox fx:id="categories" prefWidth="150.0" />
+                            </children>
+                        </HBox>
 
-                  <!-- Warning -->
-                  <Text fill="red" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Warning" text="⚠ Chi tiêu hiện tại vượt quá ngân sách" />
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-   </children>
+                        <!-- Budget -->
+                        <HBox prefHeight="31.0" prefWidth="493.0" spacing="5.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Ngân sách:" />
+                                <TextField fx:id="tfAmount" prefWidth="186.0" />
+                                <Button mnemonicParsing="false" onAction="#handleAddBudget" text="Thêm" />
+                            </children>
+                        </HBox>
+
+                        <!-- Warning -->
+                        <Text fx:id="txtWarning" fill="red" opacity="0.0" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Warning" text="⚠ Chi tiêu hiện tại vượt quá 80% ngân sách" />
+                  <TableView fx:id="tblBudgets" prefHeight="200.0" prefWidth="200.0" />
+                    </children>
+                </VBox>
+            </center>
+        </BorderPane>
+    </children>
 </AnchorPane>

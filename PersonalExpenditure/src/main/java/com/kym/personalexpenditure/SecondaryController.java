@@ -82,10 +82,8 @@ public class SecondaryController implements Initializable {
             double amount = Utils.parseCurrency(tfAmount.getText());
             LocalDate date = dpDate.getValue();
             Category selectedCategory = categories.getSelectionModel().getSelectedItem();
-            String description = tfDesc.getText();
 
             if (selectedCategory == null) {
-                // Thông báo nếu không chọn danh mục
                 Utils.getAlert("Bạn cần chọn danh mục cho giao dịch!").showAndWait();
                 return;
             }
@@ -96,18 +94,56 @@ public class SecondaryController implements Initializable {
             transaction.setCategoryId(selectedCategory.getCategoryId());
             transaction.setUserId(Session.getCurrentUser().getUserId());
 
-            if (transactionServices.addTransaction(transaction)) {
-                Utils.getAlert("Giao dịch đã được lưu thành công!").showAndWait();
+            int result = transactionServices.addTransaction(transaction);
 
-                tfAmount.clear();
-                tfDesc.clear();
-                categories.getSelectionModel().clearSelection();
-                dpDate.setValue(LocalDate.now());
-            } else {
-                Utils.getAlert("Giao dịch không hợp lệ!").showAndWait();
+            switch (result) {
+                case 1:
+                    Utils.getAlert("Giao dịch đã được lưu thành công!").showAndWait();
+                    tfAmount.clear();
+                    tfDesc.clear();
+                    categories.getSelectionModel().clearSelection();
+                    dpDate.setValue(LocalDate.now());
+                    break;
+                case -1:
+                    Utils.getAlert("Danh mục không hợp lệ!").showAndWait();
+                    break;
+                case -2:
+                    Utils.getAlert("Giao dịch vượt quá ngân sách của danh mục này!").showAndWait();
+                    break;
+                case -3:
+                    Utils.getAlert("Danh mục này chưa có ngân sách. Vui lòng thiết lập ngân sách trước!").showAndWait();
+                    openPrimaryWithSelectedCategory(selectedCategory);
+                    break;
+                default:
+                    Utils.getAlert("Có lỗi xảy ra khi lưu giao dịch!").showAndWait();
+                    break;
             }
+
         } catch (Exception e) {
-            Utils.getAlert("Đã có lỗi xảy ra: " + e.getMessage()).showAndWait();
+            Utils.getAlert("Lỗi: " + e.getMessage()).showAndWait();
+        }
+    }
+
+    private void openPrimaryWithSelectedCategory(Category category) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Primary.fxml"));
+            Parent root = loader.load();
+
+            // Truyền category qua controller của Primary
+            PrimaryController controller = loader.getController();
+            controller.setSelectedCategory(category); // Hàm này bạn sẽ tạo bên PrimaryController
+
+            Stage stage = new Stage();
+            stage.setTitle("Tổng quan & Thiết lập ngân sách");
+            stage.setScene(new Scene(root));
+            stage.show();
+
+            // Đóng màn hiện tại
+            Stage currentStage = (Stage) categories.getScene().getWindow();
+            currentStage.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Utils.getAlert("Không thể chuyển đến màn hình Tổng quan!").showAndWait();
         }
     }
 
