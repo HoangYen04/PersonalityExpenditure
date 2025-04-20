@@ -8,6 +8,7 @@ import com.kym.pojo.Transaction;
 import com.kym.pojo.User;
 import com.kym.pojo.Category;
 import com.kym.pojo.Report;
+import java.io.IOException;
 
 import java.net.URL;
 import java.time.LocalDate;
@@ -17,14 +18,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -60,13 +67,11 @@ public class Report1Controller implements Initializable {
         }
 
         // Gắn sự kiện cho nút Xem Báo Cáo
-        viewReportButton.setOnAction(e -> {
-            handleViewReportClick();
-        });
+        
     }
 
     @FXML
-    private void handleViewReportClick() {
+    private void handleViewReportClick(ActionEvent event) {
         String monthText = monthComboBox.getEditor().getText();
         String yearText = yearComboBox.getEditor().getText();
         if (monthText == null || monthText.isEmpty() || yearText == null || yearText.isEmpty()) {
@@ -94,12 +99,30 @@ public class Report1Controller implements Initializable {
             }
 
             // Gọi hàm tạo báo cáo
+            switchToReportScene(event,selectedMonth,selectedYear);
 //            generateReport(selectedMonth, selectedYear);
         } catch (NumberFormatException ex) {
             showAlert("Lỗi", "Vui lòng nhập đúng định dạng số cho tháng và năm.");
         }
     }
+    public void switchToReportScene(ActionEvent event, int selectedMonth, int selectedYear) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("report2.fxml"));
+        Parent reportRoot = loader.load();
+        Report2Controller controller = loader.getController();
+        controller.setMonthYear(selectedMonth, selectedYear);
 
+        Scene scene = new Scene(reportRoot);
+
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.setScene(scene);
+        stage.setTitle("Báo cáo tài chính");
+        stage.show();
+    } catch (IOException e) {
+        showAlert("Lỗi", "Không thể tải giao diện báo cáo.");
+        e.printStackTrace();
+    }
+}
 // Phương thức để hiển thị alert
     private void showAlert(String title, String message) {
         Alert alert = new Alert(AlertType.ERROR, message, ButtonType.OK);
