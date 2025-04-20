@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="532.0" prefWidth="606.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.PrimaryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="650.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.PrimaryController">
     <children>
         <!-- Top Section: Buttons with Icons -->
         <HBox layoutY="7.0" prefHeight="90.0" prefWidth="600.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -64,7 +64,7 @@
         </HBox>
 
         <!-- Main Content -->
-        <BorderPane layoutX="116.80000000000001" layoutY="162.0" prefHeight="382.0" prefWidth="435.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="-1.0" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="65.0">
+        <BorderPane layoutX="106.0" layoutY="170.0" prefHeight="382.0" prefWidth="435.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="47.60000000000002" AnchorPane.leftAnchor="106.0" AnchorPane.rightAnchor="106.79999999999995">
             <top>
                 <Text fill="#a43030" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PageDesc" text="-- Tổng quan thông tin" wrappingWidth="216.103515625" BorderPane.alignment="TOP_LEFT">
                     <font>

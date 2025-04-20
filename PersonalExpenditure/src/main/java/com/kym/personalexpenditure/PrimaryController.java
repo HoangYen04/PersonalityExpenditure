@@ -180,6 +180,7 @@ public class PrimaryController implements Initializable {
 
     @FXML
     private void handleAddBudget(ActionEvent event) {
+        Category selectedCategory = categories.getValue();
         try {
             Category category = categories.getSelectionModel().getSelectedItem();
             if (category == null) {
@@ -187,16 +188,15 @@ public class PrimaryController implements Initializable {
                 return;
             }
             String amountText = tfAmount.getText().trim();
-        if (amountText.isEmpty()) {
-            Utils.getAlert("Vui lòng nhập số tiền ngân sách!").showAndWait();
-            return;
-        }
+            if (amountText.isEmpty()) {
+                Utils.getAlert("Vui lòng nhập số tiền ngân sách!").showAndWait();
+                return;
+            }
 
-        if (!amountText.matches("\\d+(\\.\\d+)?")) {
-            Utils.getAlert("Số tiền không hợp lệ! Chỉ nhập số.").showAndWait();
-            return;
-        }
-            
+            if (!amountText.matches("\\d+(\\.\\d+)?")) {
+                Utils.getAlert("Số tiền không hợp lệ! Chỉ nhập số.").showAndWait();
+                return;
+            }
 
             double newBudgetAmount = Utils.parseCurrency(tfAmount.getText());
             int userId = Session.getCurrentUser().getUserId();
@@ -231,11 +231,14 @@ public class PrimaryController implements Initializable {
                     return;
                 }
 
+                String categoryName = selectedCategory.getName();
+                int categoryId = selectedCategory.getCategoryId();
+
                 Budget newBudget = new Budget();
                 newBudget.setAmount(newBudgetAmount);
                 newBudget.setUserId(userId);
                 newBudget.setCategoryId(category.getCategoryId());
-                newBudget.setCategoryName(category.getName());
+                newBudget.setCategoryName(categoryName);
                 budgetServices.addBudget(newBudget);
                 Utils.getAlert("Thêm ngân sách thành công!").showAndWait();
             }

@@ -90,13 +90,14 @@ public class BudgetServices {
         }
     }
     public void addBudget(Budget budget) throws SQLException {
-        String query = "INSERT INTO budgets (user_id, category_id, amount) VALUES (?, ?, ?)";
+        String query = "INSERT INTO budgets (user_id, category_id, amount,category_name) VALUES (?, ?, ?,?)";
         
         try (Connection conn = JdbcUtils.getConn()) {
             PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, budget.getUserId()); // userId
             stmt.setInt(2, budget.getCategoryId()); // categoryId
-            stmt.setDouble(3, budget.getAmount()); // amount (ngân sách)
+            stmt.setDouble(3, budget.getAmount());
+            stmt.setString(4, budget.getCategoryName());
 
             int rowsInserted = stmt.executeUpdate();
             if (rowsInserted > 0) {
