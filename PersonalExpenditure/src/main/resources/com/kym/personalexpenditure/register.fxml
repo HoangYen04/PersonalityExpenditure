@@ -10,7 +10,7 @@
    <children>
       <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Sub" text="Đăng kí" textAlignment="CENTER" wrappingWidth="372.53508377075195" />
       <TextField fx:id="txtEmailR" promptText="Email..." />
-      <TextField fx:id="txtUsername" promptText="Tên đăng nhập" />
+      <TextField fx:id="txtUsername" promptText="Tên người dùng" />
       <PasswordField fx:id="txtPassword1" promptText="Mật khẩu" />
       <PasswordField fx:id="txtPassword2" promptText="Xác nhận mật khẩu" />
       <Button mnemonicParsing="false" onAction="#handleRegister" text="Đăng kí" />

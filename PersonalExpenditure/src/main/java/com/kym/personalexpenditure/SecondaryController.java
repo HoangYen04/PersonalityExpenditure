@@ -81,6 +81,7 @@ public class SecondaryController implements Initializable {
             TransactionServices transactionServices = new TransactionServices();
             double amount = Utils.parseCurrency(tfAmount.getText());
             LocalDate date = dpDate.getValue();
+            String des = tfDesc.getText();
             Category selectedCategory = categories.getSelectionModel().getSelectedItem();
 
             if (selectedCategory == null) {
@@ -93,6 +94,7 @@ public class SecondaryController implements Initializable {
             transaction.setDate(date);
             transaction.setCategoryId(selectedCategory.getCategoryId());
             transaction.setUserId(Session.getCurrentUser().getUserId());
+            transaction.setDes(des);
 
             int result = transactionServices.addTransaction(transaction);
 
@@ -103,6 +105,7 @@ public class SecondaryController implements Initializable {
                     tfDesc.clear();
                     categories.getSelectionModel().clearSelection();
                     dpDate.setValue(LocalDate.now());
+                   
                     break;
                 case -1:
                     Utils.getAlert("Danh mục không hợp lệ!").showAndWait();

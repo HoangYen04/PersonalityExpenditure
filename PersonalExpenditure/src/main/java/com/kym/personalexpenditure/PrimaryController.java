@@ -56,6 +56,12 @@ public class PrimaryController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        try {
+            BudgetServices budgetService = new BudgetServices();
+            budgetService.resetExpiredBudgets();
+        } catch (SQLException e) {
+            Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, e);
+        }
 
         // Lấy thông tin người dùng từ Session
         if (Session.getCurrentUser() != null) {
@@ -70,6 +76,7 @@ public class PrimaryController implements Initializable {
         try {
             List<Category> cates = c.getCates();
             this.categories.setItems(FXCollections.observableList(cates));
+            Utils.setupCurrencyTextField(tfAmount);
             TransactionServices transactionServices = new TransactionServices();
             double totalSpending = transactionServices.getTotalSpendingInCurrentMonth(Session.getCurrentUser().getUserId());
 
@@ -101,13 +108,24 @@ public class PrimaryController implements Initializable {
     }
 
     public void loadCol() {
-        TableColumn colCate = new TableColumn("Danh mục");
+        TableColumn<Budget, String> colCate = new TableColumn<>("Danh mục");
         colCate.setPrefWidth(200);
         colCate.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
 
-        TableColumn colAmount = new TableColumn("Ngân sách");
+        TableColumn<Budget, Double> colAmount = new TableColumn<>("Ngân sách");
         colAmount.setPrefWidth(200);
-        colAmount.setCellValueFactory(new PropertyValueFactory("amount"));
+        colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
+        colAmount.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Double item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(String.format("%,.0f", item)); // hoặc %,.2f nếu muốn hiện .00
+                }
+            }
+        });
 
         this.tblBudgets.getColumns().addAll(colCate, colAmount);
     }
@@ -193,10 +211,10 @@ public class PrimaryController implements Initializable {
                 return;
             }
 
-            if (!amountText.matches("\\d+(\\.\\d+)?")) {
-                Utils.getAlert("Số tiền không hợp lệ! Chỉ nhập số.").showAndWait();
-                return;
-            }
+//            if (!amountText.matches("\\d+(\\.\\d+)?")) {
+//                Utils.getAlert("Số tiền không hợp lệ! Chỉ nhập số.").showAndWait();
+//                return;
+//            }
 
             double newBudgetAmount = Utils.parseCurrency(tfAmount.getText());
             int userId = Session.getCurrentUser().getUserId();
@@ -208,11 +226,11 @@ public class PrimaryController implements Initializable {
             Budget existingBudget = budgetServices.getBudgetByCategoryAndUser(userId, category.getCategoryId());
 
             if (existingBudget != null) {
-                // Nếu đã có ngân sách cho danh mục, kiểm tra điều kiện chỉnh sửa
-                if (newBudgetAmount <= existingBudget.getAmount()) {
-                    Utils.getAlert("Ngân sách mới phải lớn hơn ngân sách cũ!").showAndWait();
-                    return;
-                }
+//                // Nếu đã có ngân sách cho danh mục, kiểm tra điều kiện chỉnh sửa
+//                if (newBudgetAmount <= existingBudget.getAmount()) {
+//                    Utils.getAlert("Ngân sách mới phải lớn hơn ngân sách cũ!").showAndWait();
+//                    return;
+//                }
 
                 // Cập nhật ngân sách
                 double totalUpdatedBudget = totalBudget + newBudgetAmount - existingBudget.getAmount();
@@ -246,6 +264,7 @@ public class PrimaryController implements Initializable {
             // Cập nhật lại giao diện
             loadData();
             loadTotalBudget();
+            tfAmount.clear();
         } catch (SQLException ex) {
             ex.printStackTrace();
             Utils.getAlert("Đã có lỗi xảy ra khi thêm hoặc cập nhật ngân sách!").showAndWait();
