@@ -1,0 +1,35 @@
+/*
+Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+Click nbfs://nbhost/SystemFileSystem/Templates/Other/CascadeStyleSheet.css to edit this template
+*/
+/* 
+    Created on : Apr 17, 2025, 4:41:23 PM
+    Author     : ADMIN
+*/
+VBox {
+    -fx-background-color: aquamarine;
+    -fx-padding: 10;
+    -fx-spacing: 5;  
+}
+Label.Sub {
+    -fx-font-size: 24px; 
+    -fx-font-weight: bold;
+}
+Text.Sup {
+    -fx-font-size: 14px; 
+}
+Text.Sub {
+    -fx-font-size: 24px; 
+    -fx-font-weight: bold;
+}
+Label.Sup {
+    -fx-font-size: 14px; 
+}
+Button{
+    -fx-background-color: darkblue;
+    -fx-font-weight: bold;
+    -fx-text-fill: white;
+    -fx-font-size: 13;
+}
+
+

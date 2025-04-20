@@ -14,7 +14,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="478.0" prefWidth="570.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.PrimaryController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="650.0" stylesheets="@stylek.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.SecondaryController">
    <children>
       <!-- Top Section: Buttons with Icons -->
       <HBox layoutY="7.0" prefHeight="90.0" prefWidth="600.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -45,26 +45,26 @@
                   </VBox>
                </children>
             </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
+            <Text fx:id="txtGreeting" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="86.0" text="Đăng xuất" />
+            <Button mnemonicParsing="false" onAction="#handleLogout" prefHeight="27.0" prefWidth="86.0" text="Đăng xuất" />
          </children>
       </HBox>
 
       <!-- Second Section: Tabs -->
       <HBox layoutY="101.0" prefHeight="23.0" prefWidth="600.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.799999999999955" AnchorPane.topAnchor="101.0">
          <children>
-            <Button mnemonicParsing="false" text="Tổng quan" />
+            <Button mnemonicParsing="false" onAction="#handleOverview" text="Tổng quan" />
             <Button mnemonicParsing="false" style="-fx-background-color: #00FF00;" text="Thêm giao dịch" />
             <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="133.0" text="Báo cáo tài chính" />
          </children>
       </HBox>
 
       <!-- Main Content -->
-      <BorderPane layoutX="57.0" layoutY="163.0" prefHeight="230.0" prefWidth="456.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="71.80000000000001" AnchorPane.leftAnchor="57.0" AnchorPane.rightAnchor="98.99999999999994">
+      <BorderPane layoutX="106.0" layoutY="170.0" prefHeight="382.0" prefWidth="435.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="47.0" AnchorPane.leftAnchor="73.0" AnchorPane.rightAnchor="68.0">
          <top>
             <Text fill="#a43030" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PageDesc" text="--Thêm giao dịch mới" wrappingWidth="216.103515625" BorderPane.alignment="TOP_LEFT">
                <font>
@@ -80,30 +80,30 @@
                   <HBox prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="A">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Số tiền:" />
-                        <TextField prefWidth="186.0" />
+                        <TextField fx:id="tfAmount" prefWidth="186.0" />
                      </children>
                   </HBox>
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="•Ngày giao dịch :" />
-                        <DatePicker />
+                        <DatePicker fx:id="dpDate" />
                      </children>
                   </HBox>
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="B">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Danh mục:" />
-                        <ComboBox prefWidth="150.0" />
+                        <ComboBox fx:id="categories" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <HBox layoutX="10.0" layoutY="10.0" prefHeight="31.0" prefWidth="493.0" spacing="5.0" styleClass="C">
                      <children>
                         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="• Mô tả:" />
-                        <TextField prefWidth="186.0" />
+                        <TextField fx:id="tfDesc" prefWidth="186.0" />
                      </children>
                   </HBox>
                   <HBox prefHeight="100.0" prefWidth="200.0" styleClass="Money">
                      <children>
-                        <Button mnemonicParsing="false" text="Thêm giao dịch" />
+                        <Button fx:id="btnSave" mnemonicParsing="false" onAction="#handleSaveTransaction" text="Thêm giao dịch" />
                      </children>
                   </HBox>
                </children>
