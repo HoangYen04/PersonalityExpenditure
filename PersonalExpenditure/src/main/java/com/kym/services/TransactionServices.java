@@ -27,7 +27,7 @@ public class TransactionServices {
             PreparedStatement stm = cnn.prepareCall(sql);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Transaction t = new Transaction(rs.getInt("transaction_id"), rs.getDouble("amount"), rs.getDate("date").toLocalDate(), rs.getInt("category_id"), rs.getInt("user_id"));
+                Transaction t = new Transaction(rs.getInt("transaction_id"), rs.getDouble("amount"), rs.getDate("date").toLocalDate(), rs.getInt("category_id"), rs.getInt("user_id"),rs.getString("des"));
 
                 result.add(t);
 
@@ -83,6 +83,7 @@ public class TransactionServices {
         int userId = transaction.getUserId();
         int categoryId = transaction.getCategoryId();
         double newAmount = transaction.getAmount();
+        String des = transaction.getDes();
 
         if (!isCategoryValid(categoryId)) {
             return -1; // Danh mục không hợp lệ
@@ -100,12 +101,13 @@ public class TransactionServices {
         }
 
         try ( Connection conn = JdbcUtils.getConn()) {
-            String sql = "INSERT INTO transactions (amount, date, category_id, user_id) VALUES (?, ?, ?, ?)";
+            String sql = "INSERT INTO transactions (amount, date, category_id, user_id, des) VALUES (?, ?, ?, ?,?)";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setDouble(1, newAmount);
             stmt.setDate(2, java.sql.Date.valueOf(transaction.getDate()));
             stmt.setInt(3, categoryId);
             stmt.setInt(4, userId);
+            stmt.setString(5,des);
             return stmt.executeUpdate() > 0 ? 1 : 0;
         }
     }

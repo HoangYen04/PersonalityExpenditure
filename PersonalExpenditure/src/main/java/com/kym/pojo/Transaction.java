@@ -18,11 +18,27 @@ public class Transaction {
     private LocalDate date;
     private int categoryId;
     private int userId;
+    private String des;
 
     public Transaction() {
     }
+    
 
-    public Transaction(int transactionId, double amount, LocalDate date, int categoryId, int userId) {
+//    public Transaction(int transactionId, double amount, LocalDate date, int categoryId, int userId) {
+//        if (amount <= 0) {
+//            throw new IllegalArgumentException("Số tiền phải lớn hơn 0");
+//        }
+//        if (date.isAfter(LocalDate.now())) {
+//            throw new IllegalArgumentException("Ngày giao dịch không được vượt quá hiện tại");
+//        }
+//        this.transactionId = transactionId;
+//        this.amount = amount;
+//        this.date = date;
+//        this.categoryId = categoryId;
+//        this.userId = userId;
+//    }
+
+    public Transaction(int transactionId, double amount, LocalDate date, int categoryId, int userId, String des) {
         if (amount <= 0) {
             throw new IllegalArgumentException("Số tiền phải lớn hơn 0");
         }
@@ -34,6 +50,7 @@ public class Transaction {
         this.date = date;
         this.categoryId = categoryId;
         this.userId = userId;
+        this.des = des;
     }
     
     
@@ -108,6 +125,20 @@ public class Transaction {
      */
     public void setCategoryId(int categoryId) {
         this.categoryId = categoryId;
+    }
+
+    /**
+     * @return the des
+     */
+    public String getDes() {
+        return des;
+    }
+
+    /**
+     * @param des the des to set
+     */
+    public void setDes(String des) {
+        this.des = des;
     }
 
     

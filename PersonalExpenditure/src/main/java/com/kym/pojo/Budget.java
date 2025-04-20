@@ -14,7 +14,6 @@ public class Budget {
     private int budgetId;
     private double amount;
     private LocalDate startDate;
-    private LocalDate endDate;
     private int categoryId;
     private int userId;
     private String categoryName;
@@ -22,14 +21,13 @@ public class Budget {
     public Budget() {
     }
 
-    public Budget(int budgetId, double amount, LocalDate startDate, LocalDate endDate, int categoryId, int userId, double currentSpending) {
+    public Budget(int budgetId, double amount, LocalDate startDate, int categoryId, int userId, double currentSpending) {
          if (amount < currentSpending) {
             throw new IllegalArgumentException("Ngân sách không được nhỏ hơn số đã chi");
         }
         this.budgetId = budgetId;
         this.amount = amount;
         this.startDate = startDate;
-        this.endDate = endDate;
         this.categoryId = categoryId;
         this.userId = userId;
     }
@@ -87,21 +85,7 @@ public class Budget {
     public void setStartDate(LocalDate startDate) {
         this.startDate = startDate;
     }
-
-    /**
-     * @return the endDate
-     */
-    public LocalDate getEndDate() {
-        return endDate;
-    }
-
-    /**
-     * @param endDate the endDate to set
-     */
-    public void setEndDate(LocalDate endDate) {
-        this.endDate = endDate;
-    }
-
+    
     /**
      * @return the category
      */
