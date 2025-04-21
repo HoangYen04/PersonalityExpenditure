@@ -226,11 +226,6 @@ public class PrimaryController implements Initializable {
             Budget existingBudget = budgetServices.getBudgetByCategoryAndUser(userId, category.getCategoryId());
 
             if (existingBudget != null) {
-//                // Nếu đã có ngân sách cho danh mục, kiểm tra điều kiện chỉnh sửa
-//                if (newBudgetAmount <= existingBudget.getAmount()) {
-//                    Utils.getAlert("Ngân sách mới phải lớn hơn ngân sách cũ!").showAndWait();
-//                    return;
-//                }
 
                 // Cập nhật ngân sách
                 double totalUpdatedBudget = totalBudget + newBudgetAmount - existingBudget.getAmount();
