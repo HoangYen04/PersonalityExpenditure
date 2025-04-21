@@ -35,47 +35,8 @@ public class RegisterController {
         String password1 = txtPassword1.getText().trim();
         String password2 = txtPassword2.getText().trim();
 
-        if (email.isEmpty() || username.isEmpty() || password1.isEmpty() || password2.isEmpty()) {
-            Utils.getAlert("Vui lòng điền đầy đủ thông tin.").showAndWait();
-            return;
-        }
-
-        if (!email.matches("^.+@[A-Za-z]+.*$")) {
-            Utils.getAlert("Email không hợp lệ (phải chứa '@' và ký tự sau '@')").showAndWait();
-            return;
-        }
-        if (password1.length() < 8) {
-            Utils.getAlert("Mật khẩu phải có ít nhất 8 ký tự.").showAndWait();
-            return;
-        }
-
-        if (!password1.matches(".*[A-Z].*")) {
-            Utils.getAlert("Mật khẩu phải chứa ít nhất một chữ cái viết hoa.").showAndWait();
-            return;
-        }
-
-        if (!password1.matches(".*[a-z].*")) {
-            Utils.getAlert("Mật khẩu phải chứa ít nhất một chữ cái viết thường.").showAndWait();
-            return;
-        }
-
-        if (!password1.matches(".*\\d.*")) {
-            Utils.getAlert("Mật khẩu phải chứa ít nhất một chữ số.").showAndWait();
-            return;
-        }
-
-        if (!password1.matches(".*[@#$%^&+=!].*")) {
-            Utils.getAlert("Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@, #, $, %, ^, &, +, =, !).").showAndWait();
-            return;
-        }
-
         if (!password1.equals(password2)) {
             Utils.getAlert("Mật khẩu xác nhận không khớp.").showAndWait();
-            return;
-        }
-
-        if (username.length() < 6 || username.length() > 30) {
-            Utils.getAlert("Tên đăng nhập phải có ít nhất 6 ký tự và tối đa 30 kí tự").showAndWait();
             return;
         }
 
@@ -83,19 +44,49 @@ public class RegisterController {
             User user = new User();
             user.setName(username);
             user.setEmail(email);
-            user.setPassword(password1);
+            user.setPassword(password1); // Gửi mật khẩu gốc, service sẽ băm
 
-            boolean success = userServices.registerUser(user);
+            int result = userServices.registerUser(user);
 
-            if (success) {
-                Utils.getAlert("Đăng ký thành công!").showAndWait();
-                handleLoginRedirect();
-            } else {
-                Utils.getAlert("Email đã tồn tại.").showAndWait();
+            switch (result) {
+                case 1:
+                    Utils.getAlert("Đăng ký thành công!").showAndWait();
+                    handleLoginRedirect();
+                    break;
+                case -1:
+                    Utils.getAlert("Vui lòng điền đầy đủ thông tin.").showAndWait();
+                    break;
+                case -2:
+                    Utils.getAlert("Email không hợp lệ (phải chứa '@' và ký tự sau '@').").showAndWait();
+                    break;
+                case -3:
+                    Utils.getAlert("Mật khẩu phải có ít nhất 8 ký tự.").showAndWait();
+                    break;
+                case -4:
+                    Utils.getAlert("Mật khẩu phải chứa ít nhất một chữ cái viết hoa.").showAndWait();
+                    break;
+                case -5:
+                    Utils.getAlert("Mật khẩu phải chứa ít nhất một chữ cái viết thường.").showAndWait();
+                    break;
+                case -6:
+                    Utils.getAlert("Mật khẩu phải chứa ít nhất một chữ số.").showAndWait();
+                    break;
+                case -7:
+                    Utils.getAlert("Mật khẩu phải chứa ít nhất một ký tự đặc biệt (@, #, $, %, ^, &, +, =, !).").showAndWait();
+                    break;
+                case -8:
+                    Utils.getAlert("Tên đăng nhập phải từ 6 đến 30 ký tự.").showAndWait();
+                    break;
+                case -9:
+                    Utils.getAlert("Email đã tồn tại.").showAndWait();
+                    break;
+                default:
+                    Utils.getAlert("Có lỗi xảy ra khi đăng ký.").showAndWait();
+                    break;
             }
         } catch (Exception e) {
             e.printStackTrace();
-            Utils.getAlert("Có lỗi xảy ra khi đăng ký.").showAndWait();
+            Utils.getAlert("Lỗi hệ thống trong quá trình đăng ký.").showAndWait();
         }
     }
 

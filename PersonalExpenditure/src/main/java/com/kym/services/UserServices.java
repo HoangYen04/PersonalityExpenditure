@@ -11,58 +11,105 @@ import java.sql.SQLException;
 
 public class UserServices {
 
-    public User loginByEmail(String email, String password) throws SQLException {
-        User result = null;
+    public int loginByEmail(String email, String password) {
+        if (email == null || password == null || email.trim().isEmpty() || password.trim().isEmpty()) {
+            return -1; // Trường trống
+        }
+
+        if (!email.matches("^.+@[A-Za-z]+.*$")) {
+            return -2; // Email sai định dạng
+        }
+
         try ( Connection conn = JdbcUtils.getConn()) {
-            String sql = "SELECT * FROM users WHERE email = ?"; // Chỉ lấy email
+            String sql = "SELECT * FROM users WHERE email = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, email);
 
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
-                String hashedPasswordFromDB = rs.getString("password"); // Lấy mật khẩu đã băm từ DB
-                String hashedPasswordInput = hashPassword(password); // Băm mật khẩu người dùng nhập vào
+                String hashedPasswordFromDB = rs.getString("password");
+                String hashedPasswordInput = hashPassword(password);
 
                 if (hashedPasswordFromDB.equals(hashedPasswordInput)) {
-                    result = new User();
+                    User result = new User();
                     result.setUserId(rs.getInt("user_id"));
                     result.setName(rs.getString("name"));
                     result.setEmail(rs.getString("email"));
-                    result.setPassword(hashedPasswordFromDB); // Lưu lại mật khẩu băm từ DB
-                    
-                    
+                    result.setPassword(hashedPasswordFromDB);
+
                     Session.setCurrentUser(result);
+                    return 1; // Đăng nhập thành công
+                } else {
+                    return -3; // Sai mật khẩu
                 }
+            } else {
+                return -4; // Không tìm thấy email
             }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return 0; // Lỗi kết nối
         }
-        return result;
     }
 
-    public boolean registerUser(User user) throws SQLException {
-        String password = user.getPassword();
+    public int registerUser(User user) throws SQLException {
+        String email = user.getEmail();
+        String username = user.getName();
+        String password1 = user.getPassword();
 
+        // Kiểm tra trống
+        if (email.isEmpty() || username.isEmpty() || password1.isEmpty()) {
+            return -1; // Thiếu thông tin
+        }
+
+        // Ràng buộc định dạng email
+        if (!email.matches("^.+@.+$")) {
+            return -2; // Email sai định dạng
+        }
+
+        // Ràng buộc mật khẩu
+        if (password1.length() < 8) {
+            return -3;
+        }
+        if (!password1.matches(".*[A-Z].*")) {
+            return -4;
+        }
+        if (!password1.matches(".*[a-z].*")) {
+            return -5;
+        }
+        if (!password1.matches(".*\\d.*")) {
+            return -6;
+        }
+        if (!password1.matches(".*[@#$%^&+=!].*")) {
+            return -7;
+        }
+
+        // Ràng buộc username
+        if (username.length() < 6 || username.length() > 30) {
+            return -8; // Tên đăng nhập không hợp lệ
+        }
+
+        // Kiểm tra trùng email
         try ( Connection conn = JdbcUtils.getConn()) {
-            // Kiểm tra xem email đã tồn tại chưa
             String checkQuery = "SELECT * FROM users WHERE email = ?";
             PreparedStatement checkStmt = conn.prepareStatement(checkQuery);
-            checkStmt.setString(1, user.getEmail());
+            checkStmt.setString(1, email);
             ResultSet rs = checkStmt.executeQuery();
 
             if (rs.next()) {
-                return false;
-                // Email đã tồn tại
+                return -9; // Email đã tồn tại
             }
-            String hashedPassword = hashPassword(password);
+
+            // Hash mật khẩu và lưu
+            String hashedPassword = hashPassword(password1);
             user.setPassword(hashedPassword);
 
-            // Thêm người dùng mới
             String insertQuery = "INSERT INTO users(name, email, password) VALUES (?, ?, ?)";
             PreparedStatement insertStmt = conn.prepareStatement(insertQuery);
-            insertStmt.setString(1, user.getName());
-            insertStmt.setString(2, user.getEmail());
-            insertStmt.setString(3, user.getPassword());
+            insertStmt.setString(1, username);
+            insertStmt.setString(2, email);
+            insertStmt.setString(3, hashedPassword);
 
-            return insertStmt.executeUpdate() > 0;
+            return insertStmt.executeUpdate() > 0 ? 1 : 0; // 1: thành công, 0: thất bại không rõ nguyên nhân
         }
     }
 
