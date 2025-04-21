@@ -26,7 +26,6 @@ CREATE TABLE `budgets` (
   `budget_id` int NOT NULL AUTO_INCREMENT,
   `amount` decimal(10,2) DEFAULT NULL,
   `start_date` date DEFAULT NULL,
-  `end_date` date DEFAULT NULL,
   `category_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
   `category_name` varchar(45) DEFAULT NULL,
@@ -35,7 +34,7 @@ CREATE TABLE `budgets` (
   KEY `user_id` (`user_id`),
   CONSTRAINT `budgets_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
   CONSTRAINT `budgets_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +43,7 @@ CREATE TABLE `budgets` (
 
 LOCK TABLES `budgets` WRITE;
 /*!40000 ALTER TABLE `budgets` DISABLE KEYS */;
-INSERT INTO `budgets` VALUES (1,400000.00,'2025-04-01','2025-04-30',1,1,'Ăn uống'),(2,500000.00,'2025-04-01','2025-04-30',3,1,'Hóa đơn'),(3,400000.00,'2025-04-01','2025-04-30',4,2,'Giải trí'),(10,500000.00,NULL,NULL,2,1,'Đi lại');
+INSERT INTO `budgets` VALUES (1,350000.00,'2025-04-20',1,1,'Ăn uống'),(2,300000.00,'2025-04-20',3,1,'Hóa đơn'),(3,400000.00,'2025-04-01',4,2,'Giải trí'),(10,300000.00,'2025-04-20',2,1,'Đi lại'),(11,34000.00,'2025-04-20',4,1,'Giải trí'),(12,34000.00,'2025-04-20',1,9,'Ăn uống'),(13,34000.00,'2025-04-20',1,8,'Ăn uống'),(14,50000.00,'2025-04-20',2,8,'Đi lại');
 /*!40000 ALTER TABLE `budgets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -88,12 +87,13 @@ CREATE TABLE `transactions` (
   `date` date DEFAULT NULL,
   `category_id` int DEFAULT NULL,
   `user_id` int DEFAULT NULL,
+  `des` varchar(45) DEFAULT NULL,
   PRIMARY KEY (`transaction_id`),
   KEY `category_id` (`category_id`),
   KEY `user_id` (`user_id`),
   CONSTRAINT `transactions_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`category_id`),
   CONSTRAINT `transactions_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=15 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -102,7 +102,7 @@ CREATE TABLE `transactions` (
 
 LOCK TABLES `transactions` WRITE;
 /*!40000 ALTER TABLE `transactions` DISABLE KEYS */;
-INSERT INTO `transactions` VALUES (1,50000.00,'2025-04-10',1,1),(2,15000.00,'2025-04-11',2,1),(3,200000.00,'2025-04-12',3,1),(4,120000.00,'2025-04-09',4,2),(5,89.00,'2025-03-31',2,1),(6,89000.00,'2025-03-18',3,1),(7,89000.00,'2025-04-18',3,1),(8,60000.00,'2025-04-16',3,6),(9,4500.00,'2025-04-19',1,4),(11,295000.00,'2025-04-19',2,1),(12,28000.00,'2025-04-19',1,2),(13,28000.00,'2025-04-19',4,2),(14,250000.00,'2025-04-19',1,1);
+INSERT INTO `transactions` VALUES (1,50000.00,'2025-04-10',1,1,NULL),(2,15000.00,'2025-04-11',2,1,NULL),(3,200000.00,'2025-04-12',3,1,NULL),(4,120000.00,'2025-04-09',4,2,NULL),(5,89.00,'2025-03-31',2,1,NULL),(6,89000.00,'2025-03-18',3,1,NULL),(7,89000.00,'2025-04-18',3,1,NULL),(8,60000.00,'2025-04-16',3,6,NULL),(9,4500.00,'2025-04-19',1,4,NULL),(11,295000.00,'2025-04-19',2,1,NULL),(12,28000.00,'2025-04-19',1,2,NULL),(13,28000.00,'2025-04-19',4,2,NULL),(14,250000.00,'2025-04-19',1,1,NULL),(15,34000.00,'2025-04-20',1,1,'ăn mì cay'),(16,1000.00,'2025-04-20',1,1,''),(17,10000.00,'2025-04-20',3,1,''),(18,34000.00,'2025-04-20',4,1,''),(19,7000.00,'2025-04-20',1,1,''),(20,33000.00,'2025-04-20',1,9,''),(21,10000.00,'2025-04-20',1,8,''),(22,23000.00,'2025-04-20',1,8,'');
 /*!40000 ALTER TABLE `transactions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -119,7 +119,7 @@ CREATE TABLE `users` (
   `email` varchar(100) DEFAULT NULL,
   `password` varchar(64) DEFAULT NULL,
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -128,7 +128,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (1,'Nguyễn Văn A','a@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(2,'Trần Thị B','b@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(3,NULL,NULL,'123456'),(4,'Nguyễn','c@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(5,'Văn Anh','d@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(6,'Anh Nguyễn','e@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(7,'mimimi','mimi123@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(8,'anhkhoa','k@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(9,'khôi nguyễn','t@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3');
+INSERT INTO `users` VALUES (1,'Nguyễn Văn A','a@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(2,'Trần Thị B','b@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(3,NULL,NULL,'123456'),(4,'Nguyễn','c@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(5,'Văn Anh','d@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(6,'Anh Nguyễn','e@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(7,'mimimi','mimi123@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(8,'anhkhoa','k@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(9,'khôi nguyễn','t@gmail.com','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3'),(10,'Huonag yen','hoang@','5deaabbf295693257db31ff9dbcb66a397a9ab8c9bf13cf6998fd7a25735a5db');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -141,4 +141,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-04-20 17:38:52
+-- Dump completed on 2025-04-21  9:04:03
