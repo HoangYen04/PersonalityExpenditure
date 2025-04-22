@@ -5,6 +5,7 @@
 package com.kym.pojo;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 
 
@@ -39,9 +40,9 @@ public class Transaction {
 //    }
 
     public Transaction(int transactionId, double amount, LocalDate date, int categoryId, int userId, String des) {
-        if (amount <= 0) {
-            throw new IllegalArgumentException("Số tiền phải lớn hơn 0");
-        }
+//        if (amount <= 0) {
+//            throw new IllegalArgumentException("Số tiền phải lớn hơn 0");
+//        }
         if (date.isAfter(LocalDate.now())) {
             throw new IllegalArgumentException("Ngày giao dịch không được vượt quá hiện tại");
         }
@@ -141,5 +142,15 @@ public class Transaction {
         this.des = des;
     }
 
+    @Override
+    public String toString() {
+        return String.valueOf(this.transactionId);
+    }
+
+
+    public String getFormattedDate() {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        return this.date.format(formatter);
+    }
     
 }

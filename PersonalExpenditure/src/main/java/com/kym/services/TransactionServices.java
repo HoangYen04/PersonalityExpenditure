@@ -8,9 +8,11 @@ import com.kym.pojo.Category;
 import com.kym.pojo.JdbcUtils;
 import com.kym.pojo.Transaction;
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,11 +22,12 @@ import java.util.List;
  */
 public class TransactionServices {
 
-    public List<Transaction> getTransaction() throws SQLException {
+    public List<Transaction> getTransaction(int userId) throws SQLException {
         List<Transaction> result = new ArrayList<>();
         try ( Connection cnn = JdbcUtils.getConn()) {
-            String sql = "SELECT * FROM transactions";
+            String sql = "SELECT * FROM transactions WHERE user_id = ?";
             PreparedStatement stm = cnn.prepareCall(sql);
+            stm.setInt(1, userId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Transaction t = new Transaction(rs.getInt("transaction_id"), rs.getDouble("amount"), rs.getDate("date").toLocalDate(), rs.getInt("category_id"), rs.getInt("user_id"),rs.getString("des"));
@@ -132,7 +135,7 @@ public class TransactionServices {
         return totalSpending;
     }
 
-public double getTotalSpendingInCurrentMonth(int userId) throws SQLException {
+    public double getTotalSpendingInCurrentMonth(int userId) throws SQLException {
         double total = 0;
         try ( Connection conn = JdbcUtils.getConn()) {
             String sql = "SELECT SUM(amount) AS total FROM transactions "
@@ -147,4 +150,55 @@ public double getTotalSpendingInCurrentMonth(int userId) throws SQLException {
         }
         return total;
     }
+    
+    //Khoa
+    public void deleteTransaction(String id, int userId) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "DELETE FROM transactions WHERE transaction_id=? AND user_id=?";
+            PreparedStatement stm = conn.prepareCall(sql);
+            stm.setString(1, id); //Tránh SQL Injection
+            stm.setInt(2, userId);
+            stm.executeUpdate();
+        }
+    }
+
+    public int updateTransaction(int transactionId, double amount, LocalDate date, int categoryId, String desc, int userId) throws SQLException {
+       
+        if (date == null || date.isAfter(LocalDate.now())) {
+            return -4;  // Lỗi: Ngày giao dịch không hợp lệ
+        }
+        if (!isCategoryValid(categoryId)) {
+            return -1;  // Lỗi: Danh mục không hợp lệ
+        }
+
+        // Kiểm tra ngân sách
+        double budget = getBudgetForCategory(categoryId, userId);
+        if (budget == -1) {
+            return -3;  // Lỗi: Danh mục này chưa có ngân sách
+        }
+
+        double totalSpent = getTotalSpendingByCategoryThisMonth(categoryId, userId);
+        if ((totalSpent + amount) > budget) {
+            return -2;  
+        }
+        
+        try (Connection conn = JdbcUtils.getConn()) {
+        // Câu lệnh SQL để cập nhật giao dịch
+        String sql = "UPDATE transactions SET amount = ?, date = ?, category_id = ?, des = ? WHERE transaction_id = ? AND user_id = ?";
+        
+        PreparedStatement stm = conn.prepareStatement(sql);
+        stm.setDouble(1, amount);  // Số tiền
+        stm.setDate(2, Date.valueOf(date));  // Ngày giao dịch
+        stm.setInt(3, categoryId);  // Danh mục
+        stm.setString(4, desc);  // Mô tả
+        stm.setInt(5, transactionId);  // ID giao dịch
+        stm.setInt(6, userId);  // ID người dùng (xác thực nếu người dùng có quyền sửa giao dịch này)
+
+        return stm.executeUpdate() > 0 ? 1 : 0;
+ 
+    }
+}
+
+
+    
 }

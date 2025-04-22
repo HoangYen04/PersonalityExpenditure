@@ -23,7 +23,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -109,11 +111,11 @@ public class PrimaryController implements Initializable {
 
     public void loadCol() {
         TableColumn<Budget, String> colCate = new TableColumn<>("Danh mục");
-        colCate.setPrefWidth(200);
+        colCate.setPrefWidth(100);
         colCate.setCellValueFactory(new PropertyValueFactory<>("categoryName"));
 
         TableColumn<Budget, Double> colAmount = new TableColumn<>("Ngân sách");
-        colAmount.setPrefWidth(200);
+        colAmount.setPrefWidth(100);
         colAmount.setCellValueFactory(new PropertyValueFactory<>("amount"));
         colAmount.setCellFactory(column -> new TableCell<>() {
             @Override
@@ -127,7 +129,37 @@ public class PrimaryController implements Initializable {
             }
         });
 
-        this.tblBudgets.getColumns().addAll(colCate, colAmount);
+        TableColumn<Budget, Void> colDelete = new TableColumn<>("Xóa");
+        colDelete.setCellFactory(e -> {
+            Button btn = new Button("Xóa");
+            btn.setStyle("-fx-background-color: red; -fx-text-fill: white;");  // Màu nền đỏ, chữ trắng
+
+            // Lấy đối tượng Budget từ dòng (row) khi nhấn nút xóa
+            btn.setOnAction(evt -> {
+                Budget bg = (Budget) ((TableRow) ((Button) evt.getSource()).getParent().getParent()).getItem();  // Lấy đối tượng Budget từ TableRow
+                deleteCelHandle(bg);
+            });
+
+            TableCell<Budget, Void> cell = new TableCell<Budget, Void>() {
+                @Override
+                protected void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+
+                    // Kiểm tra nếu là dòng trống thì không hiển thị nút
+                    if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(btn); // Nếu có dữ liệu, hiển thị nút
+                    }
+                }
+            };
+
+            return cell;
+        });
+        colDelete.setPrefWidth(50);
+
+        
+        this.tblBudgets.getColumns().addAll(colCate, colAmount, colDelete);
     }
 
     private void loadTotalBudget() {
@@ -228,12 +260,22 @@ public class PrimaryController implements Initializable {
             if (existingBudget != null) {
 
                 // Cập nhật ngân sách
+                
                 double totalUpdatedBudget = totalBudget + newBudgetAmount - existingBudget.getAmount();
                 if (totalUpdatedBudget <= currentTotalSpending) {
                     Utils.getAlert("Tổng ngân sách phải lớn hơn tổng chi tiêu!").showAndWait();
                     return;
                 }
-
+                
+                if (newBudgetAmount <= 0){
+                    budgetServices.deleteBudget(existingBudget.toString(), userId);
+                    Utils.getAlert("Ngân sách đã bị xóa!").showAndWait();
+                    loadData();
+                    return;
+                }
+                
+                
+                Utils.getAlert(existingBudget.toString()).showAndWait();
                 existingBudget.setAmount(newBudgetAmount);
                 budgetServices.updateBudget(existingBudget);
                 Utils.getAlert("Cập nhật ngân sách thành công!").showAndWait();
@@ -266,4 +308,44 @@ public class PrimaryController implements Initializable {
         }
     }
 
+    
+    private void deleteCelHandle(Budget bg){
+    String id = String.valueOf(bg.getBudgetId());  // Lấy ID của Budget, dùng phương thức getBudgetId()
+
+    // Hiển thị cảnh báo xác nhận xóa
+    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+    alert.setTitle("Xác nhận xóa");
+    alert.setHeaderText("Bạn có chắc chắn muốn xóa ngân sách này?");
+    alert.showAndWait().ifPresent(response -> {
+    if (response == ButtonType.OK) {
+        try {
+            // Lấy thông tin chi tiêu hiện tại và ngân sách
+            double currentTotalSpending = transactionServices.getTotalSpendingInCurrentMonth(Session.getCurrentUser().getUserId());
+            double totalBudget = budgetServices.getTotalBudgetByUserId(Session.getCurrentUser().getUserId());
+
+            // Lấy ngân sách hiện tại
+            Budget existingBudget = budgetServices.getBudgetByCategoryAndUser(Session.getCurrentUser().getUserId(), bg.getCategoryId());
+            if (existingBudget != null) {
+                double totalUpdatedBudget = totalBudget - existingBudget.getAmount();  // Cập nhật lại tổng ngân sách sau khi xóa
+
+            // Kiểm tra điều kiện tổng ngân sách phải lớn hơn tổng chi tiêu
+            if (totalUpdatedBudget <= currentTotalSpending) {
+                Utils.getAlert("Tổng ngân sách phải lớn hơn tổng chi tiêu! Không thể xóa").showAndWait();
+                return;
+            }
+
+            // Xóa ngân sách
+            budgetServices.deleteBudget(id, Session.getCurrentUser().getUserId());
+            Utils.getAlert("Xóa ngân sách thành công!").show();
+            loadData();  // Cập nhật lại giao diện
+            }
+
+            } catch (SQLException ex) {
+                Logger.getLogger(PrimaryController.class.getName()).log(Level.SEVERE, null, ex);
+                Utils.getAlert("Đã có lỗi xảy ra khi xóa ngân sách!").showAndWait();
+            }
+        } else {            
+        }
+      });
+    }
 }

@@ -11,16 +11,21 @@ package com.kym.pojo;
 public class Category {
     private int categoryId;
     private String name;
-    private int userId;
+//    private int userId;
 
 
     public Category() {
     }
 
-    public Category(int categoryId, String name, int userId) {
+//    public Category(int categoryId, String name, int userId) {
+//        this.categoryId = categoryId;
+//        this.name = name;
+//        this.userId = userId;
+//    }
+    
+    public Category(int categoryId, String name) {
         this.categoryId = categoryId;
         this.name = name;
-        this.userId = userId;
     }
 
     @Override
@@ -62,16 +67,16 @@ public class Category {
     /**
      * @return the userId
      */
-    public int getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
+//    public int getUserId() {
+//        return userId;
+//    }
+//
+//    /**
+//     * @param userId the userId to set
+//     */
+//    public void setUserId(int userId) {
+//        this.userId = userId;
+//    }
 
  
     
