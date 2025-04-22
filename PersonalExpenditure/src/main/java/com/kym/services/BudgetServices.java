@@ -84,6 +84,7 @@ public class BudgetServices {
                 budget.setAmount(rs.getDouble("amount"));
                 budget.setUserId(rs.getInt("user_id"));
                 budget.setCategoryId(rs.getInt("category_id"));
+                budget.setBudgetId(rs.getInt("budget_id"));
             }
         }
 
@@ -127,6 +128,16 @@ public class BudgetServices {
             } else {
                 System.out.println("Không thể thêm ngân sách.");
             }
+        }
+    }
+    
+    public void deleteBudget(String id, int userId) throws SQLException{
+        try (Connection conn = JdbcUtils.getConn()) {
+            String sql = "DELETE FROM budgets WHERE budget_id=? AND user_id=?";
+            PreparedStatement stm = conn.prepareCall(sql);
+            stm.setString(1, id); //Tránh SQL Injection
+            stm.setInt(2, userId);
+            stm.executeUpdate();
         }
     }
 

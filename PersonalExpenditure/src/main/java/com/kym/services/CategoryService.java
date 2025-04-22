@@ -25,7 +25,7 @@ public class CategoryService {
             PreparedStatement stm = cnn.prepareCall(sql);
             ResultSet rs = stm.executeQuery();
             while(rs.next()) {
-                Category c = new Category(rs.getInt("category_id"), rs.getString("name"),rs.getInt("user_id"));
+                Category c = new Category(rs.getInt("category_id"), rs.getString("name"));
                 
                 result.add(c);
                 
@@ -33,4 +33,23 @@ public class CategoryService {
             return result;
         }
     }
+    
+    public Category getCategoryById(int categoryId) throws SQLException {
+        Category category = null;
+        String sql = "SELECT * FROM categories WHERE category_id = ?";
+        
+        try (Connection conn = JdbcUtils.getConn(); 
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, categoryId);  // Gán giá trị categoryId vào câu lệnh SQL
+            
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    // Tạo đối tượng Category từ kết quả truy vấn
+                    category = new Category(rs.getInt("category_id"), rs.getString("name"));
+                }
+            }
+        }
+        return category;  // Trả về đối tượng Category hoặc null nếu không tìm thấy
+    }
+    
 }

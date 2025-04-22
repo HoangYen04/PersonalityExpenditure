@@ -132,7 +132,11 @@ public class Budget {
     public void setCategoryName(String categoryName) {
         this.categoryName = categoryName;
     }
-    
+
+    @Override
+    public String toString() {
+        return String.valueOf(this.budgetId);
+    }
     
     
 }
