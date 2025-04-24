@@ -242,7 +242,7 @@ public class PrimaryController implements Initializable {
                 Utils.getAlert("Vui lòng nhập số tiền ngân sách!").showAndWait();
                 return;
             }
-
+          
             double newBudgetAmount = Utils.parseCurrency(tfAmount.getText());
             int userId = Session.getCurrentUser().getUserId();
 
@@ -302,6 +302,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
+
     
     private void deleteCelHandle(Budget bg){
     String id = String.valueOf(bg.getBudgetId());  // Lấy ID của Budget, dùng phương thức getBudgetId()
@@ -342,4 +343,21 @@ public class PrimaryController implements Initializable {
         }
       });
     }
+
+    @FXML
+    private void handleReportButtonClick(ActionEvent event) throws IOException {
+        // Tải giao diện report.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("report1.fxml"));
+        Parent reportRoot = loader.load();
+
+        // Lấy Stage hiện tại từ sự kiện
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Tạo Scene mới và đặt vào Stage
+        Scene scene = new Scene(reportRoot);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+
 }

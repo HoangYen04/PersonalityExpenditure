@@ -33,6 +33,7 @@ public class CategoryService {
             return result;
         }
     }
+
     
     public Category getCategoryById(int categoryId) throws SQLException {
         Category category = null;
@@ -52,4 +53,19 @@ public class CategoryService {
         return category;  
     }
     
+
+      public String getCategoryNameById(int categoryId) throws SQLException {
+        String categoryName = "Không có tên danh mục";  // Giá trị mặc định nếu không tìm thấy
+        try (Connection cnn = JdbcUtils.getConn()) {
+            String sql = "SELECT name FROM categories WHERE category_id = ?";
+            PreparedStatement stm = cnn.prepareStatement(sql);
+            stm.setInt(1, categoryId);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                categoryName = rs.getString("name");
+            }
+        }
+        return categoryName;
+    }
+
 }

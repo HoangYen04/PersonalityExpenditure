@@ -60,7 +60,7 @@
          <children>
             <Button mnemonicParsing="false" onAction="#handleOverview" text="Tổng quan" />
             <Button mnemonicParsing="false" style="-fx-background-color: #00FF00;" text="Thêm giao dịch" />
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="133.0" text="Báo cáo tài chính" />
+            <Button mnemonicParsing="false" onAction="#handleReportButtonClick" prefHeight="27.0" prefWidth="133.0" text="Báo cáo tài chính" />
          </children>
       </HBox>
 

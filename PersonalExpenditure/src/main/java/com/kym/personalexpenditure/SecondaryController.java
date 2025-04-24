@@ -202,9 +202,9 @@ public class SecondaryController implements Initializable {
             e.printStackTrace();
         }
     }
-
+ 
     
-    //Khoa
+
     public void loadTableData() {
         TransactionServices s = new TransactionServices();
         try {
@@ -411,5 +411,20 @@ public class SecondaryController implements Initializable {
             btnSave.setText("Thêm giao dịch");
             btnSave.setOnAction(event -> handleSaveTransaction());
             });
+
+    }
+     @FXML
+    private void handleReportButtonClick(ActionEvent event) throws IOException {
+        // Tải giao diện report.fxml
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("report1.fxml"));
+        Parent reportRoot = loader.load();
+
+        // Lấy Stage hiện tại từ sự kiện
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Tạo Scene mới và đặt vào Stage
+        Scene scene = new Scene(reportRoot);
+        stage.setScene(scene);
+        stage.show();
     }
 }

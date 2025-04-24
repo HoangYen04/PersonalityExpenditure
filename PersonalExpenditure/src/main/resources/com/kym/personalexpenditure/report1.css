@@ -9,7 +9,27 @@ Text.Subject {
     -fx-stroke: gold;
     -fx-stroke-width: 3;
 }
+.chart-title {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e8b57;
+}
+.custom-piechart .chart-title {
+    -fx-font-size: 14px; /* Nhỏ lại */
+    -fx-text-fill: #444; /* Màu tiêu đề nếu muốn */
+}
 
+#totalSpendingLabel {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #a43030; 
+    -fx-background-color: #f9ebea;
+    
+    -fx-border-radius: 8px;
+    -fx-background-radius: 8px;
+    -fx-border-color: #e74c3c;
+    -fx-border-width: 2px;
+}
 
 Text.SubSubject {
     -fx-font-size: 20;
@@ -53,4 +73,14 @@ Text.Warning{
 }
 HBox.Money {
     -fx-spacing: 5;
+}
+#monthYearField {
+    -fx-text-fill: #a43030;
+    -fx-font-family: "System";
+    -fx-font-weight: bold;
+    -fx-font-size: 16px;
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-insets: 0;
+    -fx-padding: 0;
 }
