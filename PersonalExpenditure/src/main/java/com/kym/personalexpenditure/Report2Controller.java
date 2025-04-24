@@ -273,62 +273,37 @@ public class Report2Controller implements Initializable {
         }
     }
     @FXML
-    private void handleLogout() {
-        try {
-            // Đóng cửa sổ hiện tại
-            Stage currentStage = (Stage) txtGreeting.getScene().getWindow();
-            currentStage.close();
+    private void handleLogout(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
+        Parent reportRoot = loader.load();
 
-            // Mở lại cửa sổ đăng nhập
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-            Parent root = loader.load();
-            Stage loginStage = new Stage();
-            loginStage.setTitle("Đăng nhập");
-            loginStage.setScene(new Scene(root));
-            loginStage.show();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        Scene scene = new Scene(reportRoot);
+        stage.setScene(scene);
+        stage.show();
     }
     @FXML
-    private void handleAddTransaction(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Secondary.fxml"));
-            Parent secondaryRoot = loader.load();
+    private void handleAddTransaction(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("secondary.fxml"));
+        Parent reportRoot = loader.load();
 
-            // Optional: truyền dữ liệu người dùng nếu cần trong SecondaryController
-            SecondaryController controller = loader.getController();
-            controller.setUser(Session.getCurrentUser());
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            Stage stage = new Stage();
-            stage.setTitle("Thêm giao dịch mới");
-            stage.setScene(new Scene(secondaryRoot));
-            stage.show();
-
-            // Đóng cửa sổ hiện tại (Primary)
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Scene scene = new Scene(reportRoot);
+        stage.setScene(scene);
+        stage.show();
     }
      @FXML
-    private void handleOverview(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Primary.fxml"));
-            Parent primaryRoot = loader.load();
+    private void handleOverview(ActionEvent event) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("primary.fxml"));
+        Parent reportRoot = loader.load();
 
-            Stage stage = new Stage();
-            stage.setTitle("Tổng quan");
-            stage.setScene(new Scene(primaryRoot));
-            stage.show();
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-            // Đóng cửa sổ hiện tại
-            Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            currentStage.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Scene scene = new Scene(reportRoot);
+        stage.setScene(scene);
+        stage.show();
     }
 
     

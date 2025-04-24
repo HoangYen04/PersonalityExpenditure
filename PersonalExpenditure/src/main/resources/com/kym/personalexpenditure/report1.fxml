@@ -34,12 +34,12 @@
                         </ImageView>
                         <VBox prefHeight="90.0" prefWidth="109.0">
                             <children>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="Báo cáo">
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="Quản lý">
                                     <font>
                                         <Font size="17.0" />
                                     </font>
                                 </Text>
-                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SubSubject" text="tài chính">
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SubSubject" text="Chi tiêu cá nhân">
                                     <font>
                                         <Font name="Candara Bold" size="45.0" />
                                     </font>
