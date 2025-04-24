@@ -108,7 +108,6 @@ public class ReportService {
 
     // Phương thức lấy tên danh mục theo categoryId
     public String getCategoryNameById(int categoryId) throws SQLException {
-        System.out.println(categoryId);
         return categoryService.getCategoryNameById(categoryId);
     }
 

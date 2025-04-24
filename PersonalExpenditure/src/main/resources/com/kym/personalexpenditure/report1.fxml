@@ -83,7 +83,7 @@
                     <children>
                         <!-- Chọn tháng và năm -->
                         <HBox prefHeight="42.0" prefWidth="574.0" spacing="10.0" styleClass="Money">
-                                                 <children>
+                            <children>
                                 <Label fx:id="totalSpendingLabel" text="Tổng chi tiêu: " />
                             </children>
                         </HBox>
@@ -106,7 +106,11 @@
                             
                         
                         <!-- Nút xem báo cáo -->
-                        <Button fx:id="viewReportButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#handleViewReportClick" prefHeight="6.0" prefWidth="195.0" text="XEM BÁO CÁO THEO THÁNG" textAlignment="CENTER" />
+                        <Button fx:id="viewReportButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#handleViewReportClick" prefHeight="6.0" prefWidth="195.0" text=" BÁO CÁO THEO THÁNG" textAlignment="CENTER" >
+                            <HBox.margin>
+                                <Insets left="50" /> 
+                            </HBox.margin>
+                        </Button>
                     </children>
                 </HBox>
             </bottom>
@@ -120,9 +124,10 @@
                         </Text>
                         <ComboBox fx:id="yearComboBox" prefHeight="45.0" prefWidth="150.0" promptText="2025" />
                         <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#onExportToExcelClicked" text="XUẤT BÁO CÁO" textAlignment="CENTER">
-                     <HBox.margin>
-                        <Insets left="10" /> 
-                     </HBox.margin></Button>
+                            <HBox.margin>
+                                <Insets left="50" /> 
+                            </HBox.margin>
+                        </Button>
                     </children>
                 </HBox>
             </top>

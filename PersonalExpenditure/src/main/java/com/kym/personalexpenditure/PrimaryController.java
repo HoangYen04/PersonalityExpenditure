@@ -307,7 +307,7 @@ public class PrimaryController implements Initializable {
         }
     }
 
-<<<<<<< HEAD
+
     
     private void deleteCelHandle(Budget bg){
     String id = String.valueOf(bg.getBudgetId());  // Lấy ID của Budget, dùng phương thức getBudgetId()
@@ -348,7 +348,7 @@ public class PrimaryController implements Initializable {
         }
       });
     }
-=======
+
     @FXML
     private void handleReportButtonClick(ActionEvent event) throws IOException {
         // Tải giao diện report.fxml
@@ -364,5 +364,5 @@ public class PrimaryController implements Initializable {
         stage.show();
     }
 
->>>>>>> mi
+
 }

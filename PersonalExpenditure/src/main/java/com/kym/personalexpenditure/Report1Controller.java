@@ -12,6 +12,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -118,8 +119,6 @@ public class Report1Controller implements Initializable {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("report2.fxml"));
             Parent reportRoot = loader.load();
-           
-           
 
             Scene scene = new Scene(reportRoot);
 
@@ -150,7 +149,6 @@ public class Report1Controller implements Initializable {
         try {
             List<Transaction> transactions = reportService.getTransactionsByUserAndYear(year);
             Map<String, Double> categoryTotals = new HashMap<>();
-            System.out.println("Loading pie chart for year: " + year);
 
             // Tính tổng chi tiêu theo danh mục
             for (Transaction t : transactions) {
@@ -189,7 +187,6 @@ public class Report1Controller implements Initializable {
         try {
             // Lấy danh sách giao dịch từ ReportService, chỉ theo năm
             List<Transaction> transactions = reportService.getTransactionsByUserAndYear(year);
-            System.out.println("loadTransactions: " + transactions.size());
 
             // Nếu không có giao dịch trong năm này, hiển thị thông báo
             if (transactions.isEmpty()) {
@@ -202,18 +199,14 @@ public class Report1Controller implements Initializable {
 
             // Tạo ObservableList để chứa giao dịch
             ObservableList<Transaction> transactionList = FXCollections.observableArrayList(transactions);
-            System.out.println("List đã gán cho TableView: " + transactionList.size());
-            System.out.println("TableView có cột: " + transactionTableView.getColumns().size());
-
-            // In ra thông tin giao dịch
-            for (Transaction t : transactions) {
-                System.out.println(t.getTransactionId() + " | " + t.getCategoryId() + " | " + t.getAmount() + " | " + t.getDate());
-            }
 
             // Tính tổng chi tiêu cho năm đã chọn
-            double total = calculateTotalSpending(transactions);
-            totalSpendingLabel.setText("Tổng chi tiêu trong năm " + year + ": " + total + " VNĐ");
+             double total = calculateTotalSpending(transactions);
+            DecimalFormat currencyFormat = new DecimalFormat("#,###.00");
+            String formattedTotal = currencyFormat.format(total);  // Định dạng thành chuỗi
 
+            // Hiển thị kết quả
+            totalSpendingLabel.setText("Tổng chi tiêu trong năm " + year + ": " + formattedTotal + " VNĐ");
             // Đổ dữ liệu vào TableView
             transactionTableView.setItems(transactionList);
 
@@ -242,14 +235,11 @@ public class Report1Controller implements Initializable {
         TableColumn<Transaction, String> colCate = new TableColumn<>("Danh mục");
         colCate.setPrefWidth(100);
         colCate.setCellValueFactory(cellData -> {
-            System.out.println("Đã cố gắng hết sức");
             try {
                 // Lấy categoryId từ đối tượng Transaction
                 int categoryId = cellData.getValue().getCategoryId();
-                System.out.println("trc khi gọi report" + categoryId);
                 // Gọi phương thức từ ReportService để lấy tên danh mục
                 String categoryName = reportService.getCategoryNameById(categoryId);
-                System.out.println("Category ID: " + categoryId + " => " + categoryName);  // In ra để kiểm tra
                 return new SimpleStringProperty(categoryName);  // Trả về tên danh mục
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -265,7 +255,6 @@ public class Report1Controller implements Initializable {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
-                System.out.println(".updateItem()");
                 if (empty || item == null) {
                     setText(null);
                 } else {
@@ -290,7 +279,6 @@ public class Report1Controller implements Initializable {
 
     @FXML
     private void handleViewReportClick(ActionEvent event) throws SQLException {
-        System.out.println("handleViewReportClick()");
 
         // Lấy giá trị tháng và năm đã chọn từ ComboBox
         Integer selectedMonth = monthComboBox.getValue();
@@ -322,7 +310,6 @@ public class Report1Controller implements Initializable {
     public void checkTransactionsAndNavigate(int month, int year, ActionEvent event) throws SQLException {
         try {
             List<Transaction> transactions = reportService.getTransactionsByUserAndMonth(month, year);
-            System.out.println("checkTransactionsAndNavigate()");
 
             if (transactions.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);

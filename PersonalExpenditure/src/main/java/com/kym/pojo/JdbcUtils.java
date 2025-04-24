@@ -22,12 +22,10 @@ public class JdbcUtils {
     }
     
     public static Connection getConn() throws SQLException {
-<<<<<<< HEAD
-        return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "Abc@123");
-=======
+
         return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "admin");
 //          return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "123456");
 
->>>>>>> mi
+
     }
 }

@@ -15,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -89,7 +90,6 @@ public class Report2Controller implements Initializable {
 
         }
 
-        System.out.println("Đã chọn: Tháng " + selectedMonth + ", Năm " + selectedYear);
         loadTransactions(month, year);
         loadPieChart(month, year);
     }
@@ -99,7 +99,6 @@ public class Report2Controller implements Initializable {
             // Lấy danh sách giao dịch từ ReportService
 
             List<Transaction> transactions = reportService.getTransactionsByUserAndMonth(month, year);
-            System.out.println("Transactions loaded: " + transactions.size());
             // Nếu không có giao dịch, hiển thị thông báo
             if (transactions.isEmpty()) {
                 Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -111,14 +110,16 @@ public class Report2Controller implements Initializable {
             }
             // Tạo ObservableList để chứa giao dịch
             ObservableList<Transaction> transactionList = FXCollections.observableArrayList(transactions);
-            System.out.println("List đã gán cho TableView: " + transactionList.size());
-            System.out.println("TableView có cột: " + transactionTableView.getColumns().size());
             for (Transaction t : transactions) {
-                System.out.println(t.getTransactionId() + " | " + t.getCategoryId() + " | " + t.getAmount() + " | " + t.getDate());
             }
 
             double total = calculateTotalSpending(transactions);
-            totalSpendingLabel.setText("Tổng chi tiêu: " + total + " VNĐ");
+            
+             DecimalFormat currencyFormat = new DecimalFormat("#,###.00");
+            String formattedTotal = currencyFormat.format(total);  // Định dạng thành chuỗi
+
+            // Hiển thị kết quả
+            totalSpendingLabel.setText("Tổng chi tiêu trong năm " + year + ": " + formattedTotal + " VNĐ");
             // Đổ dữ liệu vào TableView
             transactionTableView.setItems(FXCollections.observableList(transactionList));
 
@@ -142,14 +143,11 @@ public class Report2Controller implements Initializable {
         TableColumn<Transaction, String> colCate = new TableColumn<>("Danh mục");
         colCate.setPrefWidth(100);
         colCate.setCellValueFactory(cellData -> {
-            System.out.println("Đã cố gắng hết sức");
             try {
                 // Lấy categoryId từ đối tượng Transaction
                 int categoryId = cellData.getValue().getCategoryId();
-                System.out.println("trc khi gọi report" + categoryId);
                 // Gọi phương thức từ ReportService để lấy tên danh mục
                 String categoryName = reportService.getCategoryNameById(categoryId);
-                System.out.println("Category ID: " + categoryId + " => " + categoryName);  // In ra để kiểm tra
                 return new SimpleStringProperty(categoryName);  // Trả về tên danh mục
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -165,7 +163,6 @@ public class Report2Controller implements Initializable {
             @Override
             protected void updateItem(Double item, boolean empty) {
                 super.updateItem(item, empty);
-                System.out.println(".updateItem()");
                 if (empty || item == null) {
                     setText(null);
                 } else {
