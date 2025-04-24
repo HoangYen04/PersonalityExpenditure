@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.PieChart?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.DatePicker?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableView?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
@@ -12,87 +15,105 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="476.0" prefWidth="552.0" stylesheets="@report1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.Report1Controller">
-   <children>
-      <!-- Top Section: Buttons with Icons -->
-      <HBox layoutY="7.0" prefHeight="90.0" prefWidth="600.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-         <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <ImageView fitHeight="90.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../image/logo.jpg" />
-                     </image>
-                  </ImageView>
-                  <VBox prefHeight="90.0" prefWidth="109.0">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="Báo cáo">
-                           <font>
-                              <Font size="17.0" />
-                           </font>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="650.0" stylesheets="@report1.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.kym.personalexpenditure.Report1Controller">
+    <children>
+        <!-- Top Section: Buttons with Icons -->
+        <HBox layoutY="7.0" prefHeight="90.0" prefWidth="600.0" spacing="10.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <children>
+                <HBox prefHeight="100.0" prefWidth="200.0">
+                    <children>
+                        <ImageView fitHeight="90.0" fitWidth="108.0" pickOnBounds="true" preserveRatio="true">
+                            <image>
+                                <Image url="@../../../image/logo.jpg" />
+                            </image>
+                        </ImageView>
+                        <VBox prefHeight="90.0" prefWidth="109.0">
+                            <children>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="Subject" text="Báo cáo">
+                                    <font>
+                                        <Font size="17.0" />
+                                    </font>
+                                </Text>
+                                <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SubSubject" text="tài chính">
+                                    <font>
+                                        <Font name="Candara Bold" size="45.0" />
+                                    </font>
+                                </Text>
+                            </children>
+                            <padding>
+                                <Insets left="10.0" top="5.0" />
+                            </padding>
+                        </VBox>
+                    </children>
+                </HBox>
+                <Text fx:id="txtGreeting" strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
+                    <font>
+                        <Font size="18.0" />
+                    </font>
+                </Text>
+                <Button mnemonicParsing="false" onAction="#handleLogout" prefHeight="27.0" prefWidth="88.0" text="Đăng xuất" />
+            </children>
+        </HBox>
+
+        <!-- Second Section: Tabs -->
+        <HBox layoutY="101.0" prefHeight="23.0" prefWidth="600.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.799999999999955" AnchorPane.topAnchor="101.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#handleOverview" text="Tổng quan" />
+                <Button mnemonicParsing="false" onAction="#handleAddTransaction" text="Thêm giao dịch" />
+                <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="133.0" style="-fx-background-color: #00FF00;" text="Báo cáo tài chính" />
+            </children>
+        </HBox>
+
+        <!-- Main Content -->
+        <BorderPane layoutX="39.2" layoutY="164.0" prefHeight="436.0" prefWidth="616.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="29.0" AnchorPane.rightAnchor="5.0">
+            <center>
+                <VBox prefHeight="334.0" prefWidth="460.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
+                    <children>
+                        <!-- Chọn tháng và năm -->
+                        <HBox prefHeight="42.0" prefWidth="574.0" spacing="10.0" styleClass="Money">
+                                                 <children>
+                                <Label fx:id="totalSpendingLabel" text="Tổng chi tiêu: " />
+                            </children>
+                        </HBox>
+                        <HBox layoutX="10.0" layoutY="10.0" prefHeight="282.0" prefWidth="574.0" spacing="10.0" styleClass="Money">
+                            <children>
+                                <TableView fx:id="transactionTableView" prefHeight="165.0" prefWidth="574.0">
+                          
+                                </TableView>
+                                <PieChart fx:id="YearPieChart" />
+                            </children>
+                        </HBox>
+                    </children>
+                </VBox>
+            </center>
+            <bottom>
+                <HBox prefHeight="10.0" prefWidth="574.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Tháng: " />
+                        <ComboBox fx:id="monthComboBox" prefWidth="150.0" promptText="4" />
+                            
+                        
+                        <!-- Nút xem báo cáo -->
+                        <Button fx:id="viewReportButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#handleViewReportClick" prefHeight="6.0" prefWidth="195.0" text="XEM BÁO CÁO THEO THÁNG" textAlignment="CENTER" />
+                    </children>
+                </HBox>
+            </bottom>
+            <top>
+                <HBox prefHeight="37.0" prefWidth="574.0" BorderPane.alignment="CENTER">
+                    <children>
+                        <Text fill="#a43030" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PageDesc" text="BÁO CÁO TÀI CHÍNH" wrappingWidth="216.103515625">
+                            <font>
+                                <Font name="System Bold" size="16.0" />
+                            </font>
                         </Text>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="SubSubject" text="tài chính">
-                           <font>
-                              <Font name="Candara Bold" size="45.0" />
-                           </font>
-                        </Text>
-                     </children>
-                     <padding>
-                        <Insets left="10.0" top="5.0" />
-                     </padding>
-                  </VBox>
-               </children>
-            </HBox>
-            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Chào Bạn" textAlignment="CENTER" wrappingWidth="174.13671875">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Text>
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="88.0" text="Đăng xuất" />
-         </children>
-      </HBox>
-
-      <!-- Second Section: Tabs -->
-      <HBox layoutY="101.0" prefHeight="23.0" prefWidth="600.0" spacing="5.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="20.799999999999955" AnchorPane.topAnchor="101.0">
-         <children>
-            <Button mnemonicParsing="false" text="Tổng quan" />
-            <Button mnemonicParsing="false" text="Thêm giao dịch" />
-            <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="133.0" style="-fx-background-color: #00FF00;" text="Báo cáo tài chính" />
-         </children>
-      </HBox>
-
-      <!-- Main Content -->
-      <BorderPane layoutX="72.8" layoutY="162.0" prefHeight="241.0" prefWidth="448.0" stylesheets="@stylek.css" AnchorPane.bottomAnchor="62.0" AnchorPane.leftAnchor="62.0" AnchorPane.rightAnchor="42.0">
-         <top>
-            <Text fill="#a43030" strokeType="OUTSIDE" strokeWidth="0.0" styleClass="PageDesc" text="BÁO CÁO TÀI CHÍNH" wrappingWidth="216.103515625" BorderPane.alignment="TOP_LEFT">
-               <font>
-                  <Font name="System Bold" size="16.0" />
-               </font>
-            </Text>
-         </top>
-         <center>
-            <VBox prefHeight="214.0" prefWidth="401.0" spacing="10.0" BorderPane.alignment="CENTER_LEFT">
-               <children>
-                  <HBox prefHeight="34.0" prefWidth="549.0" styleClass="Money">
-                     <children>
-                        <!-- Total Expenditure -->
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày bắt đầu: " />
-                        <DatePicker fx:id="datePicker" />
-                     </children>
-                  </HBox>
-
-                  <!-- Budget -->
-                  <HBox prefHeight="31.0" prefWidth="493.0" spacing="5.0" />
-                  <HBox layoutX="10.0" layoutY="10.0" prefHeight="34.0" prefWidth="549.0" styleClass="Money">
-                     <children>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Ngày kết thúc: " />
-                        <DatePicker />
-                     </children>
-                  </HBox>
-                  <Button mnemonicParsing="false" text="XEM BÁO CÁO" />
-               </children>
-            </VBox>
-         </center>
-      </BorderPane>
-   </children>
+                        <ComboBox fx:id="yearComboBox" prefHeight="45.0" prefWidth="150.0" promptText="2025" />
+                        <Button alignment="TOP_LEFT" mnemonicParsing="false" onAction="#onExportToExcelClicked" text="XUẤT BÁO CÁO" textAlignment="CENTER">
+                     <HBox.margin>
+                        <Insets left="10" /> 
+                     </HBox.margin></Button>
+                    </children>
+                </HBox>
+            </top>
+        </BorderPane>
+    </children>
 </AnchorPane>

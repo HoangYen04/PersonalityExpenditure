@@ -33,4 +33,19 @@ public class CategoryService {
             return result;
         }
     }
+      public String getCategoryNameById(int categoryId) throws SQLException {
+          System.out.println("com.kym.services.CategoryService.getCategoryNameById()");
+        String categoryName = "Không có tên danh mục";  // Giá trị mặc định nếu không tìm thấy
+        try (Connection cnn = JdbcUtils.getConn()) {
+            String sql = "SELECT name FROM categories WHERE category_id = ?";
+            PreparedStatement stm = cnn.prepareStatement(sql);
+            stm.setInt(1, categoryId);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                categoryName = rs.getString("name");
+                System.out.println("CategoryName: "+categoryName);
+            }
+        }
+        return categoryName;
+    }
 }
