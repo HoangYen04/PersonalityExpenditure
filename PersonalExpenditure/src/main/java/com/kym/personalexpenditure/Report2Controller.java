@@ -115,7 +115,7 @@ public class Report2Controller implements Initializable {
 
             double total = calculateTotalSpending(transactions);
             
-             DecimalFormat currencyFormat = new DecimalFormat("#,###.00");
+             DecimalFormat currencyFormat = new DecimalFormat("#,###");
             String formattedTotal = currencyFormat.format(total);  // Định dạng thành chuỗi
 
             // Hiển thị kết quả

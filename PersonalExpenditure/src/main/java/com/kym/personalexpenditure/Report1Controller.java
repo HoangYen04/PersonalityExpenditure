@@ -202,7 +202,7 @@ public class Report1Controller implements Initializable {
 
             // Tính tổng chi tiêu cho năm đã chọn
              double total = calculateTotalSpending(transactions);
-            DecimalFormat currencyFormat = new DecimalFormat("#,###.00");
+            DecimalFormat currencyFormat = new DecimalFormat("#,###");
             String formattedTotal = currencyFormat.format(total);  // Định dạng thành chuỗi
 
             // Hiển thị kết quả
