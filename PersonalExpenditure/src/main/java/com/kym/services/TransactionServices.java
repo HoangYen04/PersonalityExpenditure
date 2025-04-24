@@ -151,7 +151,6 @@ public class TransactionServices {
         return total;
     }
     
-    //Khoa
     public void deleteTransaction(String id, int userId) throws SQLException{
         try (Connection conn = JdbcUtils.getConn()) {
             String sql = "DELETE FROM transactions WHERE transaction_id=? AND user_id=?";
@@ -187,12 +186,12 @@ public class TransactionServices {
         String sql = "UPDATE transactions SET amount = ?, date = ?, category_id = ?, des = ? WHERE transaction_id = ? AND user_id = ?";
         
         PreparedStatement stm = conn.prepareStatement(sql);
-        stm.setDouble(1, amount);  // Số tiền
-        stm.setDate(2, Date.valueOf(date));  // Ngày giao dịch
-        stm.setInt(3, categoryId);  // Danh mục
-        stm.setString(4, desc);  // Mô tả
-        stm.setInt(5, transactionId);  // ID giao dịch
-        stm.setInt(6, userId);  // ID người dùng (xác thực nếu người dùng có quyền sửa giao dịch này)
+        stm.setDouble(1, amount); 
+        stm.setDate(2, Date.valueOf(date));  
+        stm.setInt(3, categoryId);  
+        stm.setString(4, desc);  
+        stm.setInt(5, transactionId); 
+        stm.setInt(6, userId);  
 
         return stm.executeUpdate() > 0 ? 1 : 0;
  
