@@ -41,16 +41,16 @@ public class CategoryService {
         
         try (Connection conn = JdbcUtils.getConn(); 
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-            stmt.setInt(1, categoryId);  // Gán giá trị categoryId vào câu lệnh SQL
+            stmt.setInt(1, categoryId); 
             
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    // Tạo đối tượng Category từ kết quả truy vấn
+               
                     category = new Category(rs.getInt("category_id"), rs.getString("name"));
                 }
             }
         }
-        return category;  // Trả về đối tượng Category hoặc null nếu không tìm thấy
+        return category;  
     }
     
 

@@ -242,11 +242,7 @@ public class PrimaryController implements Initializable {
                 Utils.getAlert("Vui lòng nhập số tiền ngân sách!").showAndWait();
                 return;
             }
-
-//            if (!amountText.matches("\\d+(\\.\\d+)?")) {
-//                Utils.getAlert("Số tiền không hợp lệ! Chỉ nhập số.").showAndWait();
-//                return;
-//            }
+          
             double newBudgetAmount = Utils.parseCurrency(tfAmount.getText());
             int userId = Session.getCurrentUser().getUserId();
 
@@ -261,7 +257,7 @@ public class PrimaryController implements Initializable {
                 // Cập nhật ngân sách
                 
                 double totalUpdatedBudget = totalBudget + newBudgetAmount - existingBudget.getAmount();
-                if (totalUpdatedBudget <= currentTotalSpending) {
+                if (totalUpdatedBudget < currentTotalSpending) {
                     Utils.getAlert("Tổng ngân sách phải lớn hơn tổng chi tiêu!").showAndWait();
                     return;
                 }
@@ -273,14 +269,13 @@ public class PrimaryController implements Initializable {
                     return;
                 }
                 
-                
-                Utils.getAlert(existingBudget.toString()).showAndWait();
+               
                 existingBudget.setAmount(newBudgetAmount);
                 budgetServices.updateBudget(existingBudget);
                 Utils.getAlert("Cập nhật ngân sách thành công!").showAndWait();
             } else {
                 // Nếu chưa có ngân sách, thêm ngân sách mới
-                if ((totalBudget + newBudgetAmount) <= currentTotalSpending) {
+                if ((totalBudget + newBudgetAmount) < currentTotalSpending) {
                     Utils.getAlert("Tổng ngân sách phải lớn hơn tổng chi tiêu!").showAndWait();
                     return;
                 }

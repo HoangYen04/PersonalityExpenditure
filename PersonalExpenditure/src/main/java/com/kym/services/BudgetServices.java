@@ -30,7 +30,7 @@ public class BudgetServices {
             b.setUserId(userId);
             b.setCategoryId(rs.getInt("category_id"));
             b.setAmount(rs.getDouble("amount"));
-            b.setCategoryName(rs.getString("category_name"));  // Gán tên danh mục
+            b.setCategoryName(rs.getString("category_name")); 
 
             budgets.add(b);
         }
@@ -135,7 +135,7 @@ public class BudgetServices {
         try (Connection conn = JdbcUtils.getConn()) {
             String sql = "DELETE FROM budgets WHERE budget_id=? AND user_id=?";
             PreparedStatement stm = conn.prepareCall(sql);
-            stm.setString(1, id); //Tránh SQL Injection
+            stm.setString(1, id); 
             stm.setInt(2, userId);
             stm.executeUpdate();
         }

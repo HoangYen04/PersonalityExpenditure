@@ -19,6 +19,7 @@ import java.util.logging.Logger;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -37,6 +38,7 @@ import javafx.scene.control.TableRow;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
@@ -78,6 +80,7 @@ public class SecondaryController implements Initializable {
                     setDisable(empty || date.isAfter(LocalDate.now()));
                 }
             });
+            dpDate.getEditor().addEventFilter(KeyEvent.ANY, Event::consume);
             
             this.loadColumns();
             this.loadTableData();
@@ -85,7 +88,7 @@ public class SecondaryController implements Initializable {
             Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    private User currentUser;
+    private User currentUser;  //Truyền ng dùng cho primary
 
     public void setUser(User user) {
         this.currentUser = user;
@@ -116,10 +119,7 @@ public class SecondaryController implements Initializable {
             switch (result) {
                 case 1:
                     Utils.getAlert("Giao dịch đã được lưu thành công!").showAndWait();
-                    tfAmount.clear();
-                    tfDesc.clear();
-                    categories.getSelectionModel().clearSelection();
-                    dpDate.setValue(LocalDate.now());
+                    clearInput();
                     loadTableData();
                     break;
                 case -1:
@@ -149,7 +149,7 @@ public class SecondaryController implements Initializable {
 
             // Truyền category qua controller của Primary
             PrimaryController controller = loader.getController();
-            controller.setSelectedCategory(category); // Hàm này bạn sẽ tạo bên PrimaryController
+            controller.setSelectedCategory(category); // Hàm này tạo bên PrimaryController để focus category
 
             Stage stage = new Stage();
             stage.setTitle("Tổng quan & Thiết lập ngân sách");
@@ -242,7 +242,7 @@ public class SecondaryController implements Initializable {
 
         TableColumn<Transaction, Integer> colCategoryId = new TableColumn<>("Danh mục");
         colCategoryId.setCellValueFactory(new PropertyValueFactory<>("categoryId"));
-        colCategoryId.setPrefWidth(150);
+        colCategoryId.setPrefWidth(100);
 
         TableColumn<Transaction, String> colDes = new TableColumn<>("Mô tả");
         colDes.setCellValueFactory(new PropertyValueFactory<>("des"));
@@ -303,13 +303,13 @@ public class SecondaryController implements Initializable {
             return cell;
         });
         colDelete.setPrefWidth(50);
+        colEdit.setPrefWidth(50);
 
         this.tblTransaction.getColumns().addAll(colAmount, colDate, colCategoryId, colDes, colDelete, colEdit);
     }
     
     @FXML
     private void updateTransaction(int transactionId) {
-//        double amount = Double.parseDouble(tfAmount.getText());
         double amount = Utils.parseCurrency(tfAmount.getText());
 
         LocalDate date = dpDate.getValue();
@@ -360,6 +360,7 @@ public class SecondaryController implements Initializable {
         tfDesc.clear();
         categories.getSelectionModel().clearSelection();
         dpDate.setValue(LocalDate.now());
+        
     }
     
     private void deleteColHandle(Transaction tr) {
