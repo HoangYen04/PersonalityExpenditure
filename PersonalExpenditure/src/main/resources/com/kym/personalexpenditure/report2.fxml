@@ -114,10 +114,12 @@
                             </Button>
                </children>
             </HBox>
+
          </bottom>
         
         </BorderPane>
        
         
     </children>
+
 </AnchorPane>

@@ -54,6 +54,7 @@ import javafx.stage.Stage;
  */
 public class Report2Controller implements Initializable {
 
+
     @FXML
     private Text txtGreeting;
 
@@ -332,4 +333,6 @@ public class Report2Controller implements Initializable {
             e.printStackTrace();
         }
     }
+
+    
 }

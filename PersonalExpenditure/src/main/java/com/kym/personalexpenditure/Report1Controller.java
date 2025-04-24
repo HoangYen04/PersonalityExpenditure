@@ -5,15 +5,11 @@
 package com.kym.personalexpenditure;
 
 import com.kym.pojo.Transaction;
-import com.kym.pojo.User;
-import com.kym.pojo.Category;
-import com.kym.pojo.Report;
 import com.kym.services.ReportService;
 import com.kym.services.Session;
 import com.kym.services.Utils;
 import java.io.File;
 import java.io.IOException;
-
 import java.net.URL;
 import java.sql.SQLException;
 import java.time.LocalDate;
@@ -22,10 +18,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
-import javafx.application.Platform;
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -40,18 +32,17 @@ import javafx.scene.Scene;
 import javafx.scene.chart.PieChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.KeyCode;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
 import javafx.stage.Stage;
 
 /**
@@ -67,7 +58,6 @@ public class Report1Controller implements Initializable {
     private ComboBox<Integer> monthComboBox;
     @FXML
     private ComboBox<Integer> yearComboBox;
-   
 
     @FXML
     private TableView<Transaction> transactionTableView;
@@ -79,129 +69,82 @@ public class Report1Controller implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-    // Hiển thị lời chào
-    if (Session.getCurrentUser() != null) {
-        txtGreeting.setText("Chào, " + Session.getCurrentUser().getName());
-    }
-    // Thiết lập ComboBox tháng và năm
-    setupMonthComboBox();
-    setupYearComboBox();
-    // Load dữ liệu mặc định
-    int currentYear = LocalDate.now().getYear();
-    loadTransactions(currentYear);
-    loadPieChart(currentYear);
-    // Load cột cho bảng TableView
-    loadCol();
-    // Gắn sự kiện thay đổi năm
-    setupYearComboBoxListeners();
-}
-
-private void setupMonthComboBox() {
-    monthComboBox.setEditable(false); // Không cho phép nhập vào ComboBox tháng
-    for (int month = 1; month <= 12; month++) {
-        monthComboBox.getItems().add(month);
-    }
-    monthComboBox.setValue(LocalDate.now().getMonthValue());
-}
-
-private void setupYearComboBox() {
-    yearComboBox.setEditable(false); // Không cho phép nhập vào ComboBox năm
-    int currentYear = LocalDate.now().getYear();
-    for (int year = currentYear - 10; year <= currentYear; year++) {
-        yearComboBox.getItems().add(year);
-    }
-    yearComboBox.setValue(currentYear); // Chọn năm hiện tại làm mặc định
-}
-
-private void setupYearComboBoxListeners() {
-    // Khi chọn năm từ danh sách
-    yearComboBox.setOnAction(event -> {
-        Integer selectedYear = yearComboBox.getValue(); // Lấy năm đã chọn
-        if (selectedYear != null) {
-            handleYearInput(selectedYear); // Xử lý năm đã chọn
+        // Hiển thị lời chào
+        if (Session.getCurrentUser() != null) {
+            txtGreeting.setText("Chào, " + Session.getCurrentUser().getName());
         }
-    });
-}
-
-private void handleYearInput(int selectedYear) {
-    // Kiểm tra nếu năm hợp lệ
-    if (selectedYear < 2015 || selectedYear > 2025) {
-        totalSpendingLabel.setText("Không có giao dịch trong năm " + selectedYear);
-        return;
+        // Thiết lập ComboBox tháng và năm
+        setupMonthComboBox();
+        setupYearComboBox();
+        // Load dữ liệu mặc định
+        int currentYear = LocalDate.now().getYear();
+        loadTransactions(currentYear);
+        loadPieChart(currentYear);
+        // Load cột cho bảng TableView
+        loadCol();
+        // Gắn sự kiện thay đổi năm
+        setupYearComboBoxListeners();
     }
-    // Cập nhật giá trị ComboBox
-    yearComboBox.setValue(selectedYear);
-    // Gọi lại các phương thức để load dữ liệu mới
-    loadTransactions(selectedYear);
-    loadPieChart(selectedYear);
-}
-        
-        
-//        if (Session.getCurrentUser() != null) {
-//            txtGreeting.setText("Chào, " + Session.getCurrentUser().getName());
-//        }
-//
-//        monthComboBox.setEditable(true);
-//        yearComboBox.setEditable(true);
-//
-//        // Thêm tháng vào ComboBox dưới dạng String
-//        for (int month = 1; month <= 12; month++) {
-//            monthComboBox.getItems().add(month);
-//        }
-//        monthComboBox.setValue(LocalDate.now().getMonthValue());
-//        System.out.println("DEBUG: monthComboBox.getValue() type = " + monthComboBox.getValue().getClass());
-//// Thêm năm (dạng Integer)
-//        int currentYear = LocalDate.now().getYear();
-//        System.out.println("CurentYear" + currentYear);
-//        for (int year = currentYear - 10; year <= currentYear; year++) {
-//            yearComboBox.getItems().add(year);
-//        }
-//
-//        // Gắn sự kiện cho nút Xem Báo Cáo
-//        loadCol();
-//        // Chọn mặc định là năm hiện tại
-//        yearComboBox.setValue(currentYear);
-//        int currentMonth = LocalDate.now().getMonthValue();
-//        monthComboBox.setValue(currentMonth);
-//        System.out.println("DEBUG1: monthComboBox value type = " + yearComboBox.getValue().getClass());
-//
-//        // Load dữ liệu mặc định theo năm hiện tại
-//        System.out.println("getTByYear");
-//        loadTransactions(currentYear);
-//        loadPieChart(currentYear);
-//
-//        // Gắn sự kiện thay đổi năm
-//        yearComboBox.getEditor().setOnKeyPressed(event -> {
-//    if (event.getCode() == KeyCode.ENTER) {
-//        String input = yearComboBox.getEditor().getText();
-//        try {
-//            int selectedYear = Integer.parseInt(input);
-//            if (selectedYear < 2015 || selectedYear > 2025) {
-//                totalSpendingLabel.setText("Không có giao dịch trong năm " + selectedYear);
-//                return;
-//            }
-//
-//            yearComboBox.setValue(selectedYear); // Cập nhật giá trị đã chọn
-//            loadTransactions(selectedYear);
-//            loadPieChart(selectedYear);
-//
-//        } catch (NumberFormatException e) {
-//            totalSpendingLabel.setText("Năm không hợp lệ!");
-//        }
-//    }
-//});
-//        
-//        yearComboBox.setOnAction(event -> {
-//            Integer selectedYear = yearComboBox.getValue();
-//            System.out.println("SelectedYear" + selectedYear);
-//
-//            if (selectedYear != null) {
-//                loadTransactions(selectedYear);
-//                loadPieChart(selectedYear);
-//            }
-//        });
 
-    
+    private void setupMonthComboBox() {
+        monthComboBox.setEditable(false); // Không cho phép nhập vào ComboBox tháng
+        for (int month = 1; month <= 12; month++) {
+            monthComboBox.getItems().add(month);
+        }
+        monthComboBox.setValue(LocalDate.now().getMonthValue());
+    }
+
+    private void setupYearComboBox() {
+        yearComboBox.setEditable(false); // Không cho phép nhập vào ComboBox năm
+        int currentYear = LocalDate.now().getYear();
+        for (int year = currentYear - 10; year <= currentYear; year++) {
+            yearComboBox.getItems().add(year);
+        }
+        yearComboBox.setValue(currentYear); // Chọn năm hiện tại làm mặc định
+    }
+
+    private void setupYearComboBoxListeners() {
+        // Khi chọn năm từ danh sách
+        yearComboBox.setOnAction(event -> {
+            Integer selectedYear = yearComboBox.getValue(); // Lấy năm đã chọn
+            if (selectedYear != null) {
+                handleYearInput(selectedYear); // Xử lý năm đã c
+
+            }
+        });
+    }
+
+    public void switchToReportScene(ActionEvent event, int selectedMonth, int selectedYear) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("report2.fxml"));
+            Parent reportRoot = loader.load();
+           
+           
+
+            Scene scene = new Scene(reportRoot);
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(scene);
+            stage.setTitle("Báo cáo tài chính");
+            stage.show();
+        } catch (IOException e) {
+            showAlert("Lỗi", "Không thể tải giao diện báo cáo.");
+            e.printStackTrace();
+        }
+    }
+
+    private void handleYearInput(int selectedYear) {
+        // Kiểm tra nếu năm hợp lệ
+        if (selectedYear < 2015 || selectedYear > 2025) {
+            totalSpendingLabel.setText("Không có giao dịch trong năm " + selectedYear);
+            return;
+        }
+        // Cập nhật giá trị ComboBox
+        yearComboBox.setValue(selectedYear);
+        // Gọi lại các phương thức để load dữ liệu mới
+        loadTransactions(selectedYear);
+        loadPieChart(selectedYear);
+    }
 
     public void loadPieChart(int year) {
         try {
@@ -253,7 +196,7 @@ private void handleYearInput(int selectedYear) {
                 totalSpendingLabel.setText("Không có giao dịch trong năm " + year);
                 // Làm mới TableView
                 transactionTableView.setItems(FXCollections.observableArrayList());  // Xóa hết các dòng trong TableView
-                
+
                 return;
             }
 
@@ -346,70 +289,70 @@ private void handleYearInput(int selectedYear) {
     }
 
     @FXML
-private void handleViewReportClick(ActionEvent event) throws SQLException {
-    System.out.println("handleViewReportClick()");
+    private void handleViewReportClick(ActionEvent event) throws SQLException {
+        System.out.println("handleViewReportClick()");
 
-    // Lấy giá trị tháng và năm đã chọn từ ComboBox
-    Integer selectedMonth = monthComboBox.getValue();
-    Integer selectedYear = yearComboBox.getValue();
+        // Lấy giá trị tháng và năm đã chọn từ ComboBox
+        Integer selectedMonth = monthComboBox.getValue();
+        Integer selectedYear = yearComboBox.getValue();
 
-    try {
-        // Kiểm tra xem tháng có hợp lệ không
-        if (selectedMonth == null || selectedMonth < 1 || selectedMonth > 12) {
-            showAlert("Lỗi", "Tháng phải nằm trong khoảng từ 1 đến 12!");
-            return;
+        try {
+            // Kiểm tra xem tháng có hợp lệ không
+            if (selectedMonth == null || selectedMonth < 1 || selectedMonth > 12) {
+                showAlert("Lỗi", "Tháng phải nằm trong khoảng từ 1 đến 12!");
+                return;
+            }
+
+            // Kiểm tra xem năm có hợp lệ không và không vượt quá năm hiện tại
+            int currentYear = LocalDate.now().getYear();
+            int currentMonth = LocalDate.now().getMonthValue();
+            if (selectedYear == null || selectedYear > currentYear || (selectedYear == currentYear && selectedMonth > currentMonth)) {
+                showAlert("Lỗi", "Tháng/năm không được nằm trong tương lai!");
+                return;
+            }
+
+            // Gọi hàm tạo báo cáo
+            checkTransactionsAndNavigate(selectedMonth, selectedYear, event);
+        } catch (Exception ex) {
+            showAlert("Lỗi", "Tháng và năm phải là số hợp lệ!");
+            ex.printStackTrace();
         }
-
-        // Kiểm tra xem năm có hợp lệ không và không vượt quá năm hiện tại
-        int currentYear = LocalDate.now().getYear();
-        int currentMonth = LocalDate.now().getMonthValue();
-        if (selectedYear == null || selectedYear > currentYear || (selectedYear == currentYear && selectedMonth > currentMonth)) {
-            showAlert("Lỗi", "Tháng/năm không được nằm trong tương lai!");
-            return;
-        }
-
-        // Gọi hàm tạo báo cáo
-        checkTransactionsAndNavigate(selectedMonth, selectedYear, event);
-    } catch (Exception ex) {
-        showAlert("Lỗi", "Tháng và năm phải là số hợp lệ!");
-        ex.printStackTrace();
     }
-}
 
-public void checkTransactionsAndNavigate(int month, int year, ActionEvent event) throws SQLException {
-    try {
-        List<Transaction> transactions = reportService.getTransactionsByUserAndMonth(month, year);
-        System.out.println("checkTransactionsAndNavigate()");
-        
-        if (transactions.isEmpty()) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Không có giao dịch");
-            alert.setHeaderText(null);
-            alert.setContentText("Không có giao dịch trong tháng " + month + " năm " + year);
-            alert.showAndWait();
-            
-            // Load lại trang hiện tại (report1.fxml)
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("report1.fxml"));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-        } else {
-            // Nếu có giao dịch thì chuyển đến report2.fxml và truyền tháng/năm
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("report2.fxml"));
-            Parent reportRoot = loader.load();
-            Report2Controller controller = loader.getController();
-            controller.setMonthYear(month, year);  // Gọi setter để truyền dữ liệu
-            Scene scene = new Scene(reportRoot);
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(scene);
-            stage.setTitle("Báo cáo tài chính");
-            stage.show();
+    public void checkTransactionsAndNavigate(int month, int year, ActionEvent event) throws SQLException {
+        try {
+            List<Transaction> transactions = reportService.getTransactionsByUserAndMonth(month, year);
+            System.out.println("checkTransactionsAndNavigate()");
+
+            if (transactions.isEmpty()) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Không có giao dịch");
+                alert.setHeaderText(null);
+                alert.setContentText("Không có giao dịch trong tháng " + month + " năm " + year);
+                alert.showAndWait();
+
+                // Load lại trang hiện tại (report1.fxml)
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("report1.fxml"));
+                Parent root = loader.load();
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(new Scene(root));
+            } else {
+                // Nếu có giao dịch thì chuyển đến report2.fxml và truyền tháng/năm
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("report2.fxml"));
+                Parent reportRoot = loader.load();
+                Report2Controller controller = loader.getController();
+                controller.setMonthYear(month, year);  // Gọi setter để truyền dữ liệu
+                Scene scene = new Scene(reportRoot);
+                Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+                stage.setScene(scene);
+                stage.setTitle("Báo cáo tài chính");
+                stage.show();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Lỗi", "Không thể xử lý giao dịch.");
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-        showAlert("Lỗi", "Không thể xử lý giao dịch.");
     }
-}
 
     @FXML
     private void onExportToExcelClicked() {
@@ -443,7 +386,8 @@ public void checkTransactionsAndNavigate(int month, int year, ActionEvent event)
         alert.setHeaderText(null);  // Không hiển thị header
         alert.showAndWait();  // Hiển thị và chờ người dùng đóng alert
     }
-@FXML
+
+    @FXML
     private void handleLogout() {
         try {
             // Đóng cửa sổ hiện tại
@@ -461,6 +405,7 @@ public void checkTransactionsAndNavigate(int month, int year, ActionEvent event)
             e.printStackTrace();
         }
     }
+
     @FXML
     private void handleAddTransaction(ActionEvent event) {
         try {
@@ -483,7 +428,8 @@ public void checkTransactionsAndNavigate(int month, int year, ActionEvent event)
             e.printStackTrace();
         }
     }
-     @FXML
+
+    @FXML
     private void handleOverview(ActionEvent event) {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("Primary.fxml"));
@@ -500,5 +446,6 @@ public void checkTransactionsAndNavigate(int month, int year, ActionEvent event)
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 }

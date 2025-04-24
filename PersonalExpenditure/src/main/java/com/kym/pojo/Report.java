@@ -12,33 +12,24 @@ import java.util.Map;
  *
  * @author ADMIN
  */
+
+
+    
 public class Report {
-   
+
     private int userId;
 
     public Report() {
+        // Constructor mặc định (có thể để trống hoặc viết logic ở đây)
     }
 
     public Report(int userId) {
         this.userId = userId;
     }
-
-    
-
+}
     
    
   
     
-    public int getUserId() {
-        return userId;
-    }
 
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-    
-    
-}
+
