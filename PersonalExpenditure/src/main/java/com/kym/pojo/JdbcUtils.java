@@ -13,6 +13,7 @@ import java.sql.SQLException;
  * @author ADMIN
  */
 public class JdbcUtils {
+    private static Connection connection;
     static {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -23,5 +24,17 @@ public class JdbcUtils {
     
     public static Connection getConn() throws SQLException {
         return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "admin");
+    }
+    
+    // Phương thức cho phép thay đổi kết nối (dùng trong kiểm thử)
+    public static void setConnection(Connection conn) {
+        connection = conn;
+    }
+
+    // Phương thức đóng kết nối (nếu cần)
+    public static void closeConnection() throws SQLException {
+        if (connection != null && !connection.isClosed()) {
+            connection.close();
+        }
     }
 }
