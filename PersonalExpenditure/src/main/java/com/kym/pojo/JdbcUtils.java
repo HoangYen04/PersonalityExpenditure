@@ -22,6 +22,17 @@ public class JdbcUtils {
     }
     
     public static Connection getConn() throws SQLException {
+<<<<<<< Updated upstream
         return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "admin");
+<<<<<<< HEAD
+=======
+//          return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "123456");
+=======
+
+//        return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "admin");
+          return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "123456");
+>>>>>>> Stashed changes
+
+>>>>>>> mi
     }
 }
