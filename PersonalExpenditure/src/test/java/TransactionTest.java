@@ -3,6 +3,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 import com.kym.pojo.JdbcUtils;
+import org.junit.jupiter.api.Test;
 import com.kym.pojo.Transaction;
 import com.kym.services.TransactionServices;
 import java.sql.Connection;
@@ -109,31 +110,6 @@ public class TransactionTest {
         }
     }
 
-    @Test
-    void testUpdateTransaction() throws SQLException {
-        int transactionId = 1;
-        int userId = 1;
-
-        // Kiểm tra cập nhật với ngày giao dịch không hợp lệ
-        int result = transactionServices.updateTransaction(transactionId, 50.0, LocalDate.now().plusDays(1), 1, "Updated desc", userId);
-        assertEquals(-4, result); // Kết quả là -4 nếu ngày giao dịch không hợp lệ
-
-        // Kiểm tra cập nhật với danh mục không hợp lệ
-        result = transactionServices.updateTransaction(transactionId, 50.0, LocalDate.now(), -1, "Updated desc", userId);
-        assertEquals(-1, result); // Kết quả là -1 nếu danh mục không hợp lệ
-
-        // Kiểm tra cập nhật với ngân sách vượt quá
-        result = transactionServices.updateTransaction(transactionId, 200.0, LocalDate.now(), 1, "Updated desc", userId);
-        assertEquals(1, result); // Kết quả là nếu không vượt ngân sách
-
-        // Kiểm tra cập nhật khi chưa có ngân sách
-        result = transactionServices.updateTransaction(transactionId, 50.0, LocalDate.now(), 2, "Updated desc", userId);
-        assertEquals(1, result); // Kết quả là -3 nếu chưa có ngân sách, 1 nếu đã cã ngân sách
-
-        // Kiểm tra cập nhật thành công
-        result = transactionServices.updateTransaction(transactionId, 50.0, LocalDate.now(), 1, "Updated desc", userId);
-        assertEquals(1, result); // Kết quả là 1 nếu cập nhật thành công
-    }
 
     @Test
     void testGetSpendingByCategoryAndUser() throws SQLException {

@@ -21,8 +21,6 @@ import java.util.List;
  * @author ADMIN
  */
 public class TransactionServices {
-    
-     
 
     public List<Transaction> getTransaction(int userId) throws SQLException {
         List<Transaction> result = new ArrayList<>();
@@ -32,7 +30,7 @@ public class TransactionServices {
             stm.setInt(1, userId);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Transaction t = new Transaction(rs.getInt("transaction_id"), rs.getDouble("amount"), rs.getDate("date").toLocalDate(), rs.getInt("category_id"), rs.getInt("user_id"),rs.getString("des"));
+                Transaction t = new Transaction(rs.getInt("transaction_id"), rs.getDouble("amount"), rs.getDate("date").toLocalDate(), rs.getInt("category_id"), rs.getInt("user_id"), rs.getString("des"));
 
                 result.add(t);
 
@@ -112,7 +110,7 @@ public class TransactionServices {
             stmt.setDate(2, java.sql.Date.valueOf(transaction.getDate()));
             stmt.setInt(3, categoryId);
             stmt.setInt(4, userId);
-            stmt.setString(5,des);
+            stmt.setString(5, des);
             return stmt.executeUpdate() > 0 ? 1 : 0;
         }
     }
@@ -120,20 +118,20 @@ public class TransactionServices {
     // Phương thức để lấy tổng chi tiêu của danh mục theo người dùng
     public double getSpendingByCategoryAndUser(int userId, int categoryId) throws SQLException {
         double totalSpending = 0.0;
-        
+
         String query = "SELECT SUM(amount) AS totalSpending FROM transactions WHERE user_id = ? AND category_id = ?";
-        
-        try (Connection conn = JdbcUtils.getConn()) {
-             PreparedStatement stmt = conn.prepareStatement(query);
+
+        try ( Connection conn = JdbcUtils.getConn()) {
+            PreparedStatement stmt = conn.prepareStatement(query);
             stmt.setInt(1, userId);
             stmt.setInt(2, categoryId);
-            
+
             ResultSet rs = stmt.executeQuery();
             if (rs.next()) {
                 totalSpending = rs.getDouble("totalSpending");
             }
         }
-        
+
         return totalSpending;
     }
 
@@ -152,9 +150,9 @@ public class TransactionServices {
         }
         return total;
     }
-    
-    public void deleteTransaction(String id, int userId) throws SQLException{
-        try (Connection conn = JdbcUtils.getConn()) {
+
+    public void deleteTransaction(String id, int userId) throws SQLException {
+        try ( Connection conn = JdbcUtils.getConn()) {
             String sql = "DELETE FROM transactions WHERE transaction_id=? AND user_id=?";
             PreparedStatement stm = conn.prepareCall(sql);
             stm.setString(1, id); //Tránh SQL Injection
@@ -164,7 +162,7 @@ public class TransactionServices {
     }
 
     public int updateTransaction(int transactionId, double amount, LocalDate date, int categoryId, String desc, int userId) throws SQLException {
-       
+
         if (date == null || date.isAfter(LocalDate.now())) {
             return -4;  // Lỗi: Ngày giao dịch không hợp lệ
         }
@@ -177,29 +175,45 @@ public class TransactionServices {
         if (budget == -1) {
             return -3;  // Lỗi: Danh mục này chưa có ngân sách
         }
+        double oldAmount = getTransactionAmount(transactionId, userId);
 
         double totalSpent = getTotalSpendingByCategoryThisMonth(categoryId, userId);
-        if ((totalSpent + amount) > budget) {
-            return -2;  
+        if ((totalSpent + amount - oldAmount) > budget) {
+            return -2;
         }
-        
-        try (Connection conn = JdbcUtils.getConn()) {
-        // Câu lệnh SQL để cập nhật giao dịch
-        String sql = "UPDATE transactions SET amount = ?, date = ?, category_id = ?, des = ? WHERE transaction_id = ? AND user_id = ?";
-        
-        PreparedStatement stm = conn.prepareStatement(sql);
-        stm.setDouble(1, amount); 
-        stm.setDate(2, Date.valueOf(date));  
-        stm.setInt(3, categoryId);  
-        stm.setString(4, desc);  
-        stm.setInt(5, transactionId); 
-        stm.setInt(6, userId);  
 
-        return stm.executeUpdate() > 0 ? 1 : 0;
- 
+        try ( Connection conn = JdbcUtils.getConn()) {
+            // Câu lệnh SQL để cập nhật giao dịch
+            String sql = "UPDATE transactions SET amount = ?, date = ?, category_id = ?, des = ? WHERE transaction_id = ? AND user_id = ?";
+
+            PreparedStatement stm = conn.prepareStatement(sql);
+            stm.setDouble(1, amount);
+            stm.setDate(2, Date.valueOf(date));
+            stm.setInt(3, categoryId);
+            stm.setString(4, desc);
+            stm.setInt(5, transactionId);
+            stm.setInt(6, userId);
+
+            return stm.executeUpdate() > 0 ? 1 : 0;
+
+        }
+
     }
-}
 
+    // Hàm lấy giá trị amount cũ của giao dịch
+    private double getTransactionAmount(int transactionId, int userId) throws SQLException {
+        String sql = "SELECT amount FROM transactions WHERE transaction_id = ? AND user_id = ?";
+        try ( Connection conn = JdbcUtils.getConn();  PreparedStatement stm = conn.prepareStatement(sql)) {
+            stm.setInt(1, transactionId);
+            stm.setInt(2, userId);
 
-    
+            try ( ResultSet rs = stm.executeQuery()) {
+                if (rs.next()) {
+                    return rs.getDouble("amount");
+                }
+            }
+        }
+        return 0; // Nếu không tìm thấy giao dịch, trả về 0
+    }
+
 }
