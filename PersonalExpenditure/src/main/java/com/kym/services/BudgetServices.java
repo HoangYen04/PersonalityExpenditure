@@ -30,7 +30,7 @@ public class BudgetServices {
             b.setUserId(userId);
             b.setCategoryId(rs.getInt("category_id"));
             b.setAmount(rs.getDouble("amount"));
-            b.setCategoryName(rs.getString("category_name")); 
+            b.setCategoryName(rs.getString("category_name"));
 
             budgets.add(b);
         }
@@ -111,7 +111,7 @@ public class BudgetServices {
     }
 
     public void addBudget(Budget budget) throws SQLException {
-    
+
         String query = "INSERT INTO budgets (user_id, category_id, amount,category_name, start_date) VALUES (?, ?, ?,?,?)";
 
         try ( Connection conn = JdbcUtils.getConn()) {
@@ -130,14 +130,36 @@ public class BudgetServices {
             }
         }
     }
-    
-    public void deleteBudget(String id, int userId) throws SQLException{
-        try (Connection conn = JdbcUtils.getConn()) {
+
+    public void deleteBudget(int id, int userId) throws SQLException {
+        try ( Connection conn = JdbcUtils.getConn()) {
             String sql = "DELETE FROM budgets WHERE budget_id=? AND user_id=?";
             PreparedStatement stm = conn.prepareCall(sql);
-            stm.setString(1, id); 
+            stm.setInt(1, id);
             stm.setInt(2, userId);
             stm.executeUpdate();
+        }
+    }
+
+    public Budget getBudgetById(int budgetId) throws SQLException {
+        String query = "SELECT * FROM budgets WHERE budget_id=?";
+
+        try ( Connection conn = JdbcUtils.getConn()) {
+            PreparedStatement stmt = conn.prepareStatement(query);
+            stmt.setInt(1, budgetId);
+
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                Budget b = new Budget();
+                b.setBudgetId(rs.getInt("budget_id"));
+                b.setUserId(rs.getInt("user_id"));
+                b.setCategoryId(rs.getInt("category_id"));
+                b.setAmount(rs.getDouble("amount"));
+                b.setCategoryName(rs.getString("category_name"));
+                b.setStartDate(rs.getDate("start_date").toLocalDate());
+                return b;
+            }
+            return null;
         }
     }
 

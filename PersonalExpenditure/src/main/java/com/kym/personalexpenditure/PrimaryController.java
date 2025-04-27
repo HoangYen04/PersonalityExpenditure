@@ -246,7 +246,7 @@ public class PrimaryController implements Initializable {
                 }
                 
                 if (newBudgetAmount <= 0){
-                    budgetServices.deleteBudget(existingBudget.toString(), userId);
+                    budgetServices.deleteBudget(existingBudget.getBudgetId(), userId);
                     Utils.getAlert("Ngân sách đã bị xóa!").showAndWait();
                     loadData();
                     return;
@@ -288,7 +288,7 @@ public class PrimaryController implements Initializable {
 
     
     private void deleteCelHandle(Budget bg){
-    String id = String.valueOf(bg.getBudgetId());  // Lấy ID của Budget, dùng phương thức getBudgetId()
+    int id = bg.getBudgetId();  // Lấy ID của Budget, dùng phương thức getBudgetId()
 
     // Hiển thị cảnh báo xác nhận xóa
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
