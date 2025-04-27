@@ -6,10 +6,10 @@ module com.kym.personalexpenditure {
 
     opens com.kym.personalexpenditure to javafx.fxml;
     exports com.kym.personalexpenditure;
-<<<<<<< HEAD
+
     exports com.kym.pojo; 
-=======
-    exports com.kym.pojo;
->>>>>>> mi
+
+  
+
     exports com.kym.services;
 }

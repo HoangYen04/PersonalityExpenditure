@@ -103,19 +103,13 @@
                             
                         
                         <!-- Nút xem báo cáo -->
-<<<<<<< HEAD
+
                         <Button fx:id="viewReportButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#handleViewReportClick" prefHeight="6.0" prefWidth="195.0" text=" BÁO CÁO THEO THÁNG" textAlignment="CENTER" >
                             <HBox.margin>
                                 <Insets left="50" /> 
                             </HBox.margin>
                         </Button>
-=======
-<<<<<<< Updated upstream
-                        <Button fx:id="viewReportButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#handleViewReportClick" prefHeight="6.0" prefWidth="195.0" text="XEM BÁO CÁO THEO THÁNG" textAlignment="CENTER" />
-=======
-                        <Button fx:id="viewReportButton" alignment="BOTTOM_LEFT" mnemonicParsing="false" onAction="#handleViewReportClick" prefHeight="27.0" prefWidth="242.0" text="XEM BÁO CÁO THEO THÁNG" textAlignment="CENTER" />
->>>>>>> Stashed changes
->>>>>>> mi
+
                     </children>
                 </HBox>
             </bottom>
