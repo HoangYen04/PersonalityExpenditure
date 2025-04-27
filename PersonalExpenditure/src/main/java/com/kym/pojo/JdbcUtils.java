@@ -44,10 +44,8 @@ public class JdbcUtils {
     }
 
     public static Connection getConn() throws SQLException {
-        if (testConnection != null) {
-            return testConnection;
-        }
-        // còn nếu testConnection == null thì lấy connection thật
         return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "admin");
+//          return DriverManager.getConnection("jdbc:mysql://localhost/personalexpenditure", "root", "123456");
+
     }
 }
