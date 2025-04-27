@@ -67,7 +67,8 @@ public class Report1Controller implements Initializable {
     ReportService reportService = new ReportService();
     @FXML
     private Label totalSpendingLabel;
-
+  
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // Hiển thị lời chào
@@ -80,8 +81,7 @@ public class Report1Controller implements Initializable {
         // Load dữ liệu mặc định
         int currentYear = LocalDate.now().getYear();
         loadTransactions(currentYear);
-        loadPieChart(currentYear);
-        // Load cột cho bảng TableView
+
         loadCol();
         // Gắn sự kiện thay đổi năm
         setupYearComboBoxListeners();
@@ -142,8 +142,9 @@ public class Report1Controller implements Initializable {
         yearComboBox.setValue(selectedYear);
         // Gọi lại các phương thức để load dữ liệu mới
         loadTransactions(selectedYear);
-        loadPieChart(selectedYear);
+
     }
+//Load PieChart
 
     public void loadPieChart(int year) {
         try {
@@ -182,6 +183,7 @@ public class Report1Controller implements Initializable {
             Utils.getAlert("Lỗi khi tải dữ liệu biểu đồ!").showAndWait();
         }
     }
+//Kiểm tra giao dịch rồi hiện ra tableView 
 
     public void loadTransactions(int year) {
         try {
@@ -192,8 +194,11 @@ public class Report1Controller implements Initializable {
             if (transactions.isEmpty()) {
                 totalSpendingLabel.setText("Không có giao dịch trong năm " + year);
                 // Làm mới TableView
+                YearPieChart.getData().clear();
                 transactionTableView.setItems(FXCollections.observableArrayList());  // Xóa hết các dòng trong TableView
+                YearPieChart.getData().clear();
 
+                // Kiểm tra nếu giao dịch rỗng, không gọi loadPieChart
                 return;
             }
 
@@ -201,26 +206,34 @@ public class Report1Controller implements Initializable {
             ObservableList<Transaction> transactionList = FXCollections.observableArrayList(transactions);
 
             // Tính tổng chi tiêu cho năm đã chọn
-             double total = calculateTotalSpending(transactions);
+            double total = calculateTotalSpending(transactions);
             DecimalFormat currencyFormat = new DecimalFormat("#,###");
             String formattedTotal = currencyFormat.format(total);  // Định dạng thành chuỗi
 
             // Hiển thị kết quả
             totalSpendingLabel.setText("Tổng chi tiêu trong năm " + year + ": " + formattedTotal + " VNĐ");
+
             // Đổ dữ liệu vào TableView
             transactionTableView.setItems(transactionList);
+                YearPieChart.getData().clear();
 
+            // Nếu có giao dịch, gọi hàm loadPieChart (hoặc tương tự) để hiển thị biểu đồ
+            if (!transactions.isEmpty()) {
+                loadPieChart(year);  // Chỉ gọi loadPieChart khi có dữ liệu
+            }
         } catch (SQLException e) {
             e.printStackTrace();
             Utils.getAlert("Không thể lấy dữ liệu giao dịch từ cơ sở dữ liệu.").showAndWait();
         }
     }
 
-    private double calculateTotalSpending(List<Transaction> transactions) {
+//   
+    public static double calculateTotalSpending(List<Transaction> transactions) {
         return transactions.stream()
                 .mapToDouble(Transaction::getAmount)
                 .sum();
     }
+//Tạo cột cho tableView 
 
     public void loadCol() {
 
@@ -276,6 +289,7 @@ public class Report1Controller implements Initializable {
         // Thêm các cột vào TableView
         transactionTableView.getColumns().addAll(colSTT, colCate, colAmount, colDate);
     }
+//kiểm tra lỗi tháng và năm 
 
     @FXML
     private void handleViewReportClick(ActionEvent event) throws SQLException {
@@ -306,6 +320,7 @@ public class Report1Controller implements Initializable {
             ex.printStackTrace();
         }
     }
+//Kiểm tra giao dịch để chuyển qua report 2
 
     public void checkTransactionsAndNavigate(int month, int year, ActionEvent event) throws SQLException {
         try {
@@ -340,29 +355,44 @@ public class Report1Controller implements Initializable {
             showAlert("Lỗi", "Không thể xử lý giao dịch.");
         }
     }
+//xuất file báo cáo 
 
     @FXML
     private void onExportToExcelClicked() {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Lưu báo cáo");
-        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
-        File file = fileChooser.showSaveDialog(null);
+         // Kiểm tra nếu TableView không có giao dịch
+    ObservableList<Transaction> transactions = transactionTableView.getItems();
+    if (transactions == null || transactions.isEmpty()) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("Thông báo");
+        alert.setHeaderText(null);
+        alert.setContentText("Không có giao dịch để xuất báo cáo.");
+        alert.showAndWait();
+        return;
+    }
 
-        if (file != null) {
-            try {
-                reportService.exportTransactionsToCSV(transactionTableView.getItems(), file.getAbsolutePath());
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Thành công");
-                alert.setContentText("Xuất báo cáo thành công!");
-                alert.showAndWait();
-            } catch (IOException | SQLException e) {
-                e.printStackTrace();
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Lỗi");
-                alert.setContentText("Không thể xuất báo cáo!");
-                alert.showAndWait();
-            }
+    // Nếu có giao dịch thì cho phép chọn nơi lưu file
+    FileChooser fileChooser = new FileChooser();
+    fileChooser.setTitle("Lưu báo cáo");
+    fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("CSV files (*.csv)", "*.csv"));
+    File file = fileChooser.showSaveDialog(null);
+
+    if (file != null) {
+        try {
+            reportService.exportTransactionsToCSV(transactions, file.getAbsolutePath());
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Thành công");
+            alert.setHeaderText(null);
+            alert.setContentText("Xuất báo cáo thành công!");
+            alert.showAndWait();
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Lỗi");
+            alert.setHeaderText(null);
+            alert.setContentText("Không thể xuất báo cáo!");
+            alert.showAndWait();
         }
+    }
     }
 //}
 // Phương thức để hiển thị alert
