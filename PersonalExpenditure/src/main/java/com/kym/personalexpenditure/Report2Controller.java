@@ -11,6 +11,7 @@ import com.kym.services.CategoryService;
 import com.kym.services.ReportService;
 import com.kym.services.Session;
 import com.kym.services.Utils;
+import com.kym.services.CheckData;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -74,12 +75,16 @@ public class Report2Controller implements Initializable {
     private Button exportButton;
 
     public void initialize(URL url, ResourceBundle rb) {
-        if (Session.getCurrentUser() != null) {
-            txtGreeting.setText("Chào, " + Session.getCurrentUser().getName());
-        }
+        try {
+            if (Session.getCurrentUser() != null) {
+                txtGreeting.setText("Chào, " + Session.getCurrentUser().getName());
+            }
 //        setMonthYear(selectedMonth, selectedYear);
 
-        loadCol();
+            loadCol();
+        } catch (Exception e){
+            CheckData.check(e);
+        }
     }
 
     public void setMonthYear(int month, int year) {
