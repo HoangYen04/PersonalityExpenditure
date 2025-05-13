@@ -1,5 +1,6 @@
 package com.kym.personalexpenditure;
 
+import com.kym.services.CheckData;
 import com.kym.pojo.Category;
 import com.kym.pojo.Transaction;
 import com.kym.pojo.User;
@@ -58,34 +59,38 @@ public class SecondaryController implements Initializable {
     private Text txtGreeting;
     @FXML
     private TableView<Transaction> tblTransaction;
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        if (Session.getCurrentUser() != null) {
-            txtGreeting.setText("Chào, " + Session.getCurrentUser().getName());
-        }
-        CategoryService c = new CategoryService();
         try {
-            List<Category> cates = c.getCates();
-            this.categories.setItems(FXCollections.observableList(cates));
-            Utils.setupCurrencyTextField(tfAmount);
-            dpDate.setValue(LocalDate.now());
+            if (Session.getCurrentUser() != null) {
+                txtGreeting.setText("Chào, " + Session.getCurrentUser().getName());
+            }
+            CategoryService c = new CategoryService();
+            try {
+                List<Category> cates = c.getCates();
+                this.categories.setItems(FXCollections.observableList(cates));
+                Utils.setupCurrencyTextField(tfAmount);
+                dpDate.setValue(LocalDate.now());
 
-            // Thiết lập ngày không cho phép chọn quá ngày hiện tại
-            dpDate.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
-                @Override
-                public void updateItem(LocalDate date, boolean empty) {
-                    super.updateItem(date, empty);
-                    // Chỉ cho phép chọn ngày nhỏ hơn hoặc bằng ngày hiện tại
-                    setDisable(empty || date.isAfter(LocalDate.now()));
-                }
-            });
-            dpDate.getEditor().addEventFilter(KeyEvent.ANY, Event::consume);
-            
-            this.loadColumns();
-            this.loadTableData();
-        } catch (SQLException ex) {
-            Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
+                // Thiết lập ngày không cho phép chọn quá ngày hiện tại
+                dpDate.setDayCellFactory(picker -> new javafx.scene.control.DateCell() {
+                    @Override
+                    public void updateItem(LocalDate date, boolean empty) {
+                        super.updateItem(date, empty);
+                        // Chỉ cho phép chọn ngày nhỏ hơn hoặc bằng ngày hiện tại
+                        setDisable(empty || date.isAfter(LocalDate.now()));
+                    }
+                });
+                dpDate.getEditor().addEventFilter(KeyEvent.ANY, Event::consume);
+
+                this.loadColumns();
+                this.loadTableData();
+            } catch (SQLException ex) {
+                Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        } catch (Exception e) {
+            CheckData.check(e);
         }
     }
     private User currentUser;  //Truyền ng dùng cho primary
@@ -188,8 +193,6 @@ public class SecondaryController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
- 
-    
 
     public void loadTableData() {
         TransactionServices s = new TransactionServices();
@@ -200,7 +203,7 @@ public class SecondaryController implements Initializable {
             Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     public void loadColumns() {
         CategoryService c = new CategoryService();
         // Amount column
@@ -237,14 +240,14 @@ public class SecondaryController implements Initializable {
         TableColumn colDelete = new TableColumn();
         colDelete.setCellFactory(e -> {
             Button btn = new Button("Xóa");
-                btn.setStyle("-fx-background-color: red; -fx-text-fill: white;");  // Màu nền đỏ, chữ trắng
+            btn.setStyle("-fx-background-color: red; -fx-text-fill: white;");  // Màu nền đỏ, chữ trắng
 
-                //Từ button  Lên cell  Cell lên cha là cái dòng (nguyên cái dòng là đối tượng Question)  Lấy id Question
-                btn.setOnAction(evt -> {
-                    Transaction tr = (Transaction)((TableRow)(((Button)evt.getSource()).getParent().getParent())).getItem();
-                    deleteColHandle(tr);
-                });
-        
+            //Từ button  Lên cell  Cell lên cha là cái dòng (nguyên cái dòng là đối tượng Question)  Lấy id Question
+            btn.setOnAction(evt -> {
+                Transaction tr = (Transaction) ((TableRow) (((Button) evt.getSource()).getParent().getParent())).getItem();
+                deleteColHandle(tr);
+            });
+
             TableCell<Transaction, Void> cell = new TableCell<Transaction, Void>() {
                 @Override
                 protected void updateItem(Void item, boolean empty) {
@@ -261,18 +264,18 @@ public class SecondaryController implements Initializable {
 
             return cell;
         });
-        
+
         TableColumn colEdit = new TableColumn();
         colEdit.setCellFactory(e -> {
-        Button btnEdit = new Button("Sửa");
-        btnEdit.setStyle("-fx-background-color: gray; -fx-text-fill: white;");  // Màu xám
+            Button btnEdit = new Button("Sửa");
+            btnEdit.setStyle("-fx-background-color: gray; -fx-text-fill: white;");  // Màu xám
 
-        btnEdit.setOnAction(evt -> {
-            Transaction selectedTransaction = ((TableRow<Transaction>) ((Button) evt.getSource()).getParent().getParent()).getItem();
-            editColHandle(selectedTransaction);
-        });
+            btnEdit.setOnAction(evt -> {
+                Transaction selectedTransaction = ((TableRow<Transaction>) ((Button) evt.getSource()).getParent().getParent()).getItem();
+                editColHandle(selectedTransaction);
+            });
 
-        TableCell<Transaction, Void> cell = new TableCell<Transaction, Void>() {
+            TableCell<Transaction, Void> cell = new TableCell<Transaction, Void>() {
                 @Override
                 protected void updateItem(Void item, boolean empty) {
                     super.updateItem(item, empty);
@@ -293,7 +296,7 @@ public class SecondaryController implements Initializable {
 
         this.tblTransaction.getColumns().addAll(colAmount, colDate, colCategoryId, colDes, colDelete, colEdit);
     }
-    
+
     @FXML
     private void updateTransaction(int transactionId) {
         double amount = Utils.parseCurrency(tfAmount.getText());
@@ -341,14 +344,14 @@ public class SecondaryController implements Initializable {
         }
     }
 
-    private void clearInput(){
+    private void clearInput() {
         tfAmount.clear();
         tfDesc.clear();
         categories.getSelectionModel().clearSelection();
         dpDate.setValue(LocalDate.now());
-        
+
     }
-    
+
     private void deleteColHandle(Transaction tr) {
         String id = tr.toString();
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -371,35 +374,36 @@ public class SecondaryController implements Initializable {
             }
         });
     }
-    
-    private void editColHandle(Transaction selectedTransaction){
-            CategoryService c = new CategoryService();
 
-            // Điền thông tin giao dịch vào các trường text
-            DecimalFormat df = new DecimalFormat("#.##");  // Hiển thị tối đa 2 chữ số thập phân
-            String amount = df.format(selectedTransaction.getAmount());  // Định dạng số tiền
-            tfAmount.setText(amount);
-            dpDate.setValue(selectedTransaction.getDate());
-            
-            try {
-                categories.setValue(c.getCategoryById(selectedTransaction.getCategoryId()));  // Cần phải có hàm này để lấy category theo ID
-            } catch (SQLException ex) {
-                Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            tfDesc.setText(selectedTransaction.getDes());
+    private void editColHandle(Transaction selectedTransaction) {
+        CategoryService c = new CategoryService();
 
-            // Thay đổi nút "Thêm giao dịch" thành "Sửa giao dịch"
-            btnSave.setText("Sửa giao dịch");
+        // Điền thông tin giao dịch vào các trường text
+        DecimalFormat df = new DecimalFormat("#.##");  // Hiển thị tối đa 2 chữ số thập phân
+        String amount = df.format(selectedTransaction.getAmount());  // Định dạng số tiền
+        tfAmount.setText(amount);
+        dpDate.setValue(selectedTransaction.getDate());
 
-            // Lưu lại ID giao dịch để biết là đang sửa giao dịch nào
-            btnSave.setOnAction(saveEvent -> {
-                updateTransaction(selectedTransaction.getTransactionId());  // Gọi hàm updateTransaction để sửa giao dịch
+        try {
+            categories.setValue(c.getCategoryById(selectedTransaction.getCategoryId()));  // Cần phải có hàm này để lấy category theo ID
+        } catch (SQLException ex) {
+            Logger.getLogger(SecondaryController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        tfDesc.setText(selectedTransaction.getDes());
+
+        // Thay đổi nút "Thêm giao dịch" thành "Sửa giao dịch"
+        btnSave.setText("Sửa giao dịch");
+
+        // Lưu lại ID giao dịch để biết là đang sửa giao dịch nào
+        btnSave.setOnAction(saveEvent -> {
+            updateTransaction(selectedTransaction.getTransactionId());  // Gọi hàm updateTransaction để sửa giao dịch
             btnSave.setText("Thêm giao dịch");
             btnSave.setOnAction(event -> handleSaveTransaction());
-            });
+        });
 
     }
-     @FXML
+
+    @FXML
     private void handleReportButtonClick(ActionEvent event) throws IOException {
         // Tải giao diện report.fxml
         FXMLLoader loader = new FXMLLoader(getClass().getResource("report1.fxml"));
